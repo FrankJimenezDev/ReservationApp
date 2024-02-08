@@ -4,7 +4,7 @@ export class UserService implements Service<User> {
     async getAll(): Promise<User[]> {
 
         const users = await User.find()
-        if (!users) {
+        if (users.length === 0) {
             throw new Error(`No se encontraron usuarios registrados`)
         }
         return users
@@ -31,13 +31,12 @@ export class UserService implements Service<User> {
         })
 
         if (!user) {
-            throw `No existe usuario con el id: ${id}`
+            throw new Error (`No existe usuario con el id: ${id}`);
         }
 
         User.merge(user, body)
         await User.save(user);
         return user;
-
     }
 
     async delete(id: string): Promise<User> {
@@ -47,7 +46,7 @@ export class UserService implements Service<User> {
         })
 
         if (!user) {
-            throw `No se encontro usuario con el id: ${id}`
+            throw new Error(`No se encontro usuario con el id: ${id}`);
         }
 
         if (!user.status) {
