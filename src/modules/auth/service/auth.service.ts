@@ -39,9 +39,13 @@ export class AuthService implements Auth<User> {
             email
         });
 
-        const isSamePassword = compare(password, user?.password!);
+        if (!user) {
+            throw new Error('Password or Email incorrect');
+        }
 
-        if (!isSamePassword || !user) {
+        const isSamePassword = await compare(password, user.password!);
+
+        if (!isSamePassword) {
             throw new Error('Password or Email incorrect');
         }
 
