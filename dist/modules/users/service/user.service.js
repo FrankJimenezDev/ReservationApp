@@ -36,12 +36,25 @@ class UserService {
     }
     update(id, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+            const user = yield users_1.User.findOneBy({
+                id
+            });
+            if (!user) {
+                throw new Error(`No existe usuario con el id ${id}`);
+            }
+            return user;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+            const user = yield users_1.User.findOneBy({
+                id
+            });
+            if (!user) {
+                throw new Error(`No existe usuario con el id ${id}`);
+            }
+            ;
+            return user;
         });
     }
 }
