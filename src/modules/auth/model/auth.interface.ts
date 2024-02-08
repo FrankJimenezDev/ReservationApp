@@ -1,8 +1,10 @@
+import { RegisterDto } from "./register.dto";
+import { LoginDto } from "./login.dto";
 
 export interface Auth<T> {
-    register(body : T) : Promise<T>;
-    login() : void;
-    googleLogin() : void;
-    facebookLogin() : void;
-    xLogin() : void;
+    register( registerDto : RegisterDto) : Promise<T>;
+    login(loginDTO : LoginDto) : Promise<any>;
+    googleLogin() : any;
+    facebookLogin() : any;
+    xLogin() : any;
 }

@@ -1,15 +1,21 @@
 import { User } from "../../../config/entities/users";
 import { Auth } from "../model/auth.interface";
+import { RegisterDto } from "../model/register.dto";
+import { encrypt } from '../helpers/bcrypt';
+import { LoginDto } from "../model/login.dto";
+import { compare } from "../helpers/bcrypt"
+import { generarJWT } from "../helpers/jwt-generator";
 
 
 export class AuthService implements Auth<User> {
-    async register(body: User): Promise<User> {
+    async register(body: RegisterDto): Promise<User> {
         const {
             name,
             lastname,
-            email,
-            password
+            email
         } = body
+
+        const password = await encrypt(body.password);
 
         const user = User.create({
             name,
@@ -26,17 +32,50 @@ export class AuthService implements Auth<User> {
 
         return user;
     }
-    login(): void {
+
+    async login(body: LoginDto): Promise<any> {
+        const { email, password } = body
+        const user = await User.findOneBy({
+            email
+        });
+
+        const isSamePassword = compare(password, user?.password!);
+
+        if (!isSamePassword || !user) {
+            throw new Error('Password or Email incorrect');
+        }
+
+        // Se crea el token
+        const token = await generarJWT({
+            rol: user.rol,
+            id: user.id,
+            status: user.status
+        });
+
+        const userRelevantData = {
+            id: user.id,
+            name: user.name,
+            lastname: user.lastname,
+            email: user.email,
+            rol: user.rol
+        }
+
+        return {
+            user: userRelevantData,
+            token
+        }
+
+    }
+    googleLogin(): any {
         throw new Error("Method not implemented.");
     }
-    googleLogin(): void {
+    facebookLogin(): any {
         throw new Error("Method not implemented.");
     }
-    facebookLogin(): void {
-        throw new Error("Method not implemented.");
-    }
-    xLogin(): void {
+    xLogin(): any {
         throw new Error("Method not implemented.");
     }
 
 }
+
+
