@@ -15,6 +15,9 @@ class UserService {
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield users_1.User.find();
+            if (!users) {
+                throw new Error(`No se encontraron usuarios registrados`);
+            }
             return users;
         });
     }
@@ -24,14 +27,25 @@ class UserService {
                 id
             });
             if (!user) {
-                throw new Error(`No existe usuario con el id ${id}`);
+                throw new Error(`No existe usuario con el id: ${id}`);
             }
             return user;
         });
     }
     create(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+            const { name, lastname, correo, password } = body;
+            const user = users_1.User.create({
+                name,
+                lastname,
+                correo,
+                password
+            });
+            yield user.save();
+            if (!user) {
+                throw new Error(`Error al crear Usuario`);
+            }
+            return user;
         });
     }
     update(id, body) {
@@ -40,8 +54,10 @@ class UserService {
                 id
             });
             if (!user) {
-                throw new Error(`No existe usuario con el id ${id}`);
+                throw `No existe usuario con el id: ${id}`;
             }
+            users_1.User.merge(user, body);
+            yield users_1.User.save(user);
             return user;
         });
     }
@@ -51,9 +67,17 @@ class UserService {
                 id
             });
             if (!user) {
-                throw new Error(`No existe usuario con el id ${id}`);
+                throw `No se encontro usuario con el id: ${id}`;
             }
-            ;
+            if (!user.status) {
+                users_1.User.merge(user, {
+                    status: true
+                });
+                yield users_1.User.save(user);
+                return user;
+            }
+            users_1.User.merge(user, { status: false });
+            yield users_1.User.save(user);
             return user;
         });
     }

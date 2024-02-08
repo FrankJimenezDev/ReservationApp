@@ -18,33 +18,110 @@ class UsersController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield this.service.getAll();
-                if (!result.length) {
-                    res.status(200).json({
-                        success: true,
-                        msg: `No se encontraron usuarios registrados`
-                    });
-                    return;
-                }
                 res.status(200).json({
                     success: true,
                     result
                 });
             }
             catch (error) {
-                res.status(500).json({
+                if (error instanceof Error) {
+                    res.status(404).json({
+                        success: false,
+                        error: error.message
+                    });
+                }
+                else {
+                    // Handle unexpected errors with status 500
+                    console.error('Unexpected error:', error);
+                    res.status(500).json({
+                        success: false,
+                        error: 'Internal Server Error'
+                    });
+                }
+            }
+        });
+    }
+    getOneUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const result = yield this.service.getOne(id);
+                res.status(200).json({
+                    success: true,
+                    result
+                });
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    res.status(404).json({
+                        success: false,
+                        error: error.message
+                    });
+                }
+                else {
+                    // Handle unexpected errors with status 500
+                    console.error('Unexpected error:', error);
+                    res.status(500).json({
+                        success: false,
+                        error: 'Internal Server Error'
+                    });
+                }
+            }
+        });
+    }
+    createUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { body } = req;
+            try {
+                const result = yield this.service.create(body);
+                res.status(200).json({
+                    success: true,
+                    result
+                });
+            }
+            catch (error) {
+                res.json({
                     success: false,
                     error: error.message
                 });
             }
         });
     }
-    getOneUsers(req, res) {
-    }
-    createUser(req, res) {
-    }
     updateUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const { body } = req;
+            try {
+                const result = yield this.service.update(id, body);
+                res.status(200).json({
+                    success: true,
+                    result
+                });
+            }
+            catch (error) {
+                res.json({
+                    success: false,
+                    error: error.message
+                });
+            }
+        });
     }
     deleteUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.service.delete(req.params.id);
+                res.status(200).json({
+                    success: true,
+                    result
+                });
+            }
+            catch (error) {
+                res.json({
+                    success: false,
+                    error: error.message
+                });
+            }
+        });
     }
 }
 exports.UsersController = UsersController;

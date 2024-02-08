@@ -18,7 +18,7 @@ export class User extends BaseEntity {
     correo!: string
     
     @Column()
-    age!: number
+    password!: string
     
     @Column({ type: "boolean", default: true})
     status!: boolean 

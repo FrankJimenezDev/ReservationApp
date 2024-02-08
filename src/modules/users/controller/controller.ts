@@ -8,33 +8,122 @@ export class UsersController {
     async getAllUsers(res: Response) {
         try {
             const result = await this.service.getAll()
-            if (!result.length) {
-                return res.status(200).json({
-                    success: true,
-                    msg: `No se encontraron usuarios registrados`
-                })
+            res.status(200).json({
+                success: true,
+                result
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
             }
+        }
+    }
+
+    async getOneUsers(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const result = await this.service.getOne(id);
+
+            res.status(200).json({
+                success: true,
+                result
+            });
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
+    }
+
+    async createUser(req: Request, res: Response) {
+        const { body } = req;
+        try {
+            const result = await this.service.create(body)
+            res.status(201).json({
+                success: true,
+                result
+            })
+        } catch (error: any) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
+    }
+
+    async updateUser(req: Request, res: Response) {
+
+        const { id } = req.params;
+        const { body } = req
+
+        try {
+            const result = await this.service.update(id, body)
             res.status(200).json({
                 success: true,
                 result
             })
         } catch (error: any) {
-            res.status(500).json({
-                success: false,
-                error: error.message
-            })
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
         }
     }
-    asyncgetOneUsers(req: Request, res: Response) {
-
-    }
-    createUser(req: Request, res: Response) {
-
-    }
-    updateUser(req: Request, res: Response) {
-
-    }
-    deleteUsers(req: Request, res: Response) {
-
+    async deleteUsers(req: Request, res: Response) {
+        try {
+            const result = await this.service.delete(req.params.id)
+            res.status(200).json({
+                success: true,
+                result
+            })
+        } catch (error: any) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
     }
 }
