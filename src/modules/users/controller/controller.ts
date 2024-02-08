@@ -5,18 +5,27 @@ export class UsersController {
 
     constructor(private service: Service<User>) { }
 
-    getAllUsers(res: Response) {
+    async getAllUsers(res: Response) {
         try {
-            const result = this.service.getAll()
+            const result = await this.service.getAll()
+            if (!result.length) {
+                return res.status(200).json({
+                    success: true,
+                    msg: `No se encontraron usuarios registrados`
+                })
+            }
             res.status(200).json({
+                success: true,
                 result
             })
-        } catch (error) {
-
+        } catch (error: any) {
+            res.status(500).json({
+                success: false,
+                error: error.message
+            })
         }
-
     }
-    getOneUsers(req: Request, res: Response) {
+    asyncgetOneUsers(req: Request, res: Response) {
 
     }
     createUser(req: Request, res: Response) {

@@ -14,8 +14,8 @@ const users_1 = require("../../../config/entities/users");
 class UserService {
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_1.User.find();
-            return user;
+            const users = yield users_1.User.find();
+            return users;
         });
     }
     getOne(id) {

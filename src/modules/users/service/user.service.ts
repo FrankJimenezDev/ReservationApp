@@ -2,8 +2,8 @@ import { User } from "../../../config/entities/users";
 
 export class UserService implements Service<User> {
     async getAll(): Promise<User[]> {
-        const user = await User.find()
-        return user
+        const users = await User.find()
+        return users
     }
     async getOne(id: string): Promise<User> {
         const user = await User.findOneBy({
