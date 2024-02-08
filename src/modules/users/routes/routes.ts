@@ -9,7 +9,6 @@ const service : Service<User> = new UserService()
 
 routes.get('/', (req : Request, res : Response)=> new UsersController(service).getAllUsers(res))
 routes.get('/:id', (req : Request, res : Response)=> new UsersController(service).getOneUsers(req, res))
-routes.post('/', (req : Request, res : Response)=> new UsersController(service).createUser(req, res))
 routes.put('/:id', (req : Request, res : Response)=> new UsersController(service).updateUser(req, res))
 routes.delete('/:id', (req : Request, res : Response)=> new UsersController(service).deleteUsers(req, res))
 

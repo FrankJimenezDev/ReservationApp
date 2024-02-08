@@ -24,31 +24,6 @@ export class UserService implements Service<User> {
 
     }
 
-    async create(body: User): Promise<User> {
-
-        const {
-            name,
-            lastname,
-            correo,
-            password
-        } = body
-
-        const user = User.create({
-            name,
-            lastname,
-            correo,
-            password
-        })
-
-        await user.save();
-
-        if (!user) {
-            throw new Error(`Error al crear Usuario`)
-        }
-
-        return user;
-
-    }
     async update(id: string, body: User): Promise<User> {
 
         const user = await User.findOneBy({
