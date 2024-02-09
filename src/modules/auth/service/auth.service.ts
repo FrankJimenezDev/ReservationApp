@@ -80,6 +80,10 @@ export class AuthService implements Auth<User> {
         throw new Error("Method not implemented.");
     }
 
+    logOut() : any {
+        
+    }
+
 }
 
 

@@ -1,4 +1,5 @@
 import express, { Application } from "express";
+import cookieParser from "cookie-parser"
 import "dotenv/config"
 import cors from "cors"
 import users from "../../modules/users/routes/routes"
@@ -35,6 +36,7 @@ export class ExpressServer {
     middlewares() {
         this.app.use(cors())
         this.app.use(express.json());
+        this.app.use(cookieParser())
     }
 
     routes() {

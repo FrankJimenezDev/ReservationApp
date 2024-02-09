@@ -3,12 +3,15 @@ import { AuthService } from "../service/auth.service";
 import { AuthController } from "../controller/controller";
 import { User } from "../../../config/entities/users";
 import { Auth } from "../model/auth.interface";
+import { validarJWT } from "../../users/middlewares/jwt-validator";
 
 
 const routes = Router()
 const service : Auth<User> = new AuthService()
 
-routes.post('/', (req : Request, res : Response)=> new AuthController(service).login(req, res))
+routes.post('/login', (req : Request, res : Response)=> new AuthController(service).login(req, res))
 routes.post('/register', (req : Request, res : Response)=> new AuthController(service).register(req, res))
+routes.post('/logout', (req : Request, res : Response)=> new AuthController(service).logout(req, res))
+
 
 export default routes;
