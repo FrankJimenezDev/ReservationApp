@@ -5,10 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 @Entity()
 export class User extends BaseEntity {
 
-    @PrimaryColumn()
+    @PrimaryColumn({unique : true})
     id: string = uuidv4()
 
-    @Column({ unique : true })
+    @Column()
     name!: string 
 
     @Column()
