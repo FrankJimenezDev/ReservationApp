@@ -1,11 +1,10 @@
-import { User } from "../../../config/entities/users";
-import { Auth } from "../model/auth.interface";
+import { User } from '../../../config/entities/users';
+import { Auth, AuthLogIn } from "../model/auth.interface";
 import { RegisterDto } from "../model/register.dto";
 import { encrypt } from '../helpers/bcrypt';
 import { LoginDto } from "../model/login.dto";
 import { compare } from "../helpers/bcrypt"
 import { generarJWT } from "../helpers/jwt-generator";
-
 
 export class AuthService implements Auth<User> {
     async register(body: RegisterDto): Promise<User> {
@@ -33,7 +32,7 @@ export class AuthService implements Auth<User> {
         return user;
     }
 
-    async login(body: LoginDto): Promise<any> {
+    async login(body: LoginDto): Promise<AuthLogIn> {
         const { email, password } = body
         const user = await User.findOneBy({
             email
@@ -78,10 +77,6 @@ export class AuthService implements Auth<User> {
     }
     xLogin(): any {
         throw new Error("Method not implemented.");
-    }
-
-    logOut() : any {
-        
     }
 
 }
