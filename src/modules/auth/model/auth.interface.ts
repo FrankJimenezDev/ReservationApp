@@ -8,3 +8,14 @@ export interface Auth<T> {
     facebookLogin() : any;
     xLogin() : any;
 }
+
+export type AuthLogIn = {
+    user: {
+        id: string;
+        name: string;
+        lastname: string;
+        email: string;
+        rol: boolean;
+    },
+    token : string
+}
