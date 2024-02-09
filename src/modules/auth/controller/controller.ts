@@ -35,10 +35,12 @@ export class AuthController {
         const { body } = req;
         try {
             const result = await this.service.login(body)
+            res.cookie('token', result.token, { httpOnly: true });
             res.status(200).json({
                 success: true,
                 result
             })
+            
         } catch (error) {
             if (error instanceof Error) {
                 res.status(404).json({
