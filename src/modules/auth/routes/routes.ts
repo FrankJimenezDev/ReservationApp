@@ -12,10 +12,15 @@ const service : Auth<User> = new AuthService()
 
 routes.post('/login', [
     check('email', 'email con formato invalido').isEmail(),
+    check('password', 'el password es obligatorio').not().isEmpty(),
 ], (req : Request, res : Response)=> new AuthController(service).login(req, res))
 
 routes.post('/register', [
+    check('name', 'el name es obligatorio').not().isEmpty(),
     check('email', 'email con formato invalido').isEmail(),
+    check('password', 'el password es obligatorio').not().isEmpty(),
+    check('password', 'el password debe tener al menos 6 caracteres').isLength({min:6}),
+    check('password', 'el password debe tener al menos 6 caracteres').isStrongPassword(),
 ], (req : Request, res : Response)=> new AuthController(service).register(req, res))
 
 routes.post('/logout', validarJWT, (req : Request, res : Response)=> new AuthController(service).logout(req, res))
