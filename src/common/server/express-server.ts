@@ -4,6 +4,7 @@ import "dotenv/config"
 import cors from "cors"
 import users from "../../modules/users/routes/routes"
 import auth from "../../modules/auth/routes/routes"
+import reserve from "../../modules/reserve/routes/routes"
 import { db } from "../../config/db/dbconnection";
 
 export class ExpressServer {
@@ -11,7 +12,8 @@ export class ExpressServer {
     private port: number;
     private path = {
         users: '/api/users',
-        auth: '/api/auth'
+        auth: '/api/auth',
+        reserve: '/api/reserve'
     }
 
     constructor() {
@@ -42,6 +44,8 @@ export class ExpressServer {
     routes() {
         this.app.use(this.path.users, users);
         this.app.use(this.path.auth, auth);
+        this.app.use(this.path.reserve, reserve);
+
     }
 
     listen() {

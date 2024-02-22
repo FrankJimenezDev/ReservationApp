@@ -28,20 +28,3 @@ export const rolAuth = (req : Request, res : Response, next : express.NextFuncti
     }
 }
 
-export const userAuth = (req : Request, res : Response, next : express.NextFunction) => {
-
-    const token = req.cookies.token
-    const payload : any = jwt.verify(token || '', process.env.KEY_TOKEN || "")
-
-    const isSameUser = payload.id
-    const idParam = req.params.id
-
-    if (isSameUser === idParam) {
-        next()
-    } else {
-        res.status(403).json({
-            msg : 'Acceso prohibido'
-        });
-    }
-}
-
