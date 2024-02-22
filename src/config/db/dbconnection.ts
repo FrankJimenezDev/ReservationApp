@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm"
 import "reflect-metadata"
 import { User } from "../entities/users"
+import { Reserve } from "../entities/reserves"
+import { Room } from "../entities/rooms"
 
 export const db = new DataSource({
     type: "mysql",
@@ -10,5 +12,5 @@ export const db = new DataSource({
     password: 'pass',
     database: 'reservationApp',
     synchronize: true,
-    entities: [User],
+    entities: [User, Reserve, Room],
 })

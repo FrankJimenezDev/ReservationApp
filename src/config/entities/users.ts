@@ -1,5 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
+import { Reserve } from "./reserves";
 
 //Entity to use on dbconnection for Products
 @Entity()
@@ -31,6 +32,12 @@ export class User extends BaseEntity {
     
     @UpdateDateColumn()
     updatedAt: Date = new Date()
+
+    //campos de relacion
+
+    @OneToMany(() => Reserve, reserve => reserve.id)
+    @JoinColumn()
+    createdReservers!: Reserve[];
 }
 
 //Entity to use on dbconnection for Products

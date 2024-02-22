@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { Reserve } from "./reserves";
 
 //Entity to use on dbconnection for Products
 @Entity()
@@ -21,6 +22,12 @@ export class Room extends BaseEntity {
     
     @UpdateDateColumn()
     updatedAt: Date = new Date()
+
+    // campos de relacion
+
+    @OneToOne(() => Reserve, reserve => reserve.id)
+    @JoinColumn()
+    reserveid!: Reserve;
 }
 
 //Entity to use on dbconnection for Products
