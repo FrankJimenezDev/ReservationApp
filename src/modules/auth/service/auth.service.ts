@@ -11,7 +11,7 @@ export class AuthService implements Auth<User> {
         const {
             name,
             lastname,
-            email
+            email,
         } = body
 
         const password = await encrypt(body.password);
@@ -20,7 +20,7 @@ export class AuthService implements Auth<User> {
             name,
             lastname,
             email,
-            password
+            password,
         })
 
         await user.save();
