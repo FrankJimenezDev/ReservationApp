@@ -3,12 +3,13 @@ import { UserService } from "../service/user.service";
 import { UsersController } from "../controller/controller";
 import { User } from "../../../config/entities/users";
 import { validarJWT } from "../middlewares/jwt-validator";
+import { adminAuth } from "../middlewares/rol-validator";
 
 
 const routes = Router()
 const service : Service<User> = new UserService()
 
-routes.get('/', validarJWT, ( req, res : Response)=> new UsersController(service).getAllUsers(res))
+routes.get('/', validarJWT, adminAuth, ( req, res : Response)=> new UsersController(service).getAllUsers(res))
 routes.get('/:id', validarJWT, (req : Request, res : Response)=> new UsersController(service).getOneUsers(req, res))
 routes.put('/:id', validarJWT, (req : Request, res : Response)=> new UsersController(service).updateUser(req, res))
 routes.delete('/:id', validarJWT, (req : Request, res : Response)=> new UsersController(service).deleteUsers(req, res))
