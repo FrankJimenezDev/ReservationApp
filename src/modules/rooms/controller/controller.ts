@@ -54,6 +54,37 @@ export class RoomsController {
         }
     }
 
+    async create(req: Request, res: Response) {
+
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json(errors)
+        // }
+
+        const { body } = req;
+        try {
+            const result = await this.service.create!(body)
+            res.status(200).json({
+                success: true,
+                result
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+                return;
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
+    }
+
     async updateUser(req: Request, res: Response) {
 
         const { id } = req.params;

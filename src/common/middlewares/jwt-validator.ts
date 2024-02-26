@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import express from 'express';
-import { User } from '../../../config/entities/users';
+import { User } from '../../config/entities/users';
 
 
 export const validarJWT = async (req: Request, res: Response, next: express.NextFunction) => {

@@ -1,6 +1,6 @@
 import { Room } from "../../../config/entities/rooms";
 
-class RoomService implements Service<Room> {
+export class RoomService implements Service<Room> {
     async getAll(): Promise<Room[]> {
         const rooms = await Room.find()
         if (rooms.length === 0) {
@@ -22,13 +22,21 @@ class RoomService implements Service<Room> {
 
     }
 
-    async create?(body: Room): Promise<Room> {
+    async create(body: Room): Promise<Room> {
         const {
             id,
             size,
             status,
             price,
         } = body;
+
+        const searchRoom = await Room.findOneBy({
+            id
+        })
+
+        if (searchRoom) {
+            throw new Error (`Ya se ha resgistrado esta habitacion`)
+        }
 
         const room = Room.create({
             id,

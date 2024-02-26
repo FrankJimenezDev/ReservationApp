@@ -2,8 +2,8 @@ import { Request, Response, Router } from "express";
 import { UserService } from "../service/user.service";
 import { UsersController } from "../controller/controller";
 import { User } from "../../../config/entities/users";
-import { validarJWT } from "../middlewares/jwt-validator";
-import { rolAuth } from "../middlewares/rol-validator";
+import { validarJWT } from "../../../common/middlewares/jwt-validator";
+import { rolAuth } from "../../../common/middlewares/rol-validator";
 
 
 const routes = Router()

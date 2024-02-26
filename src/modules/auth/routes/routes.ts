@@ -3,7 +3,7 @@ import { AuthService } from "../service/auth.service";
 import { AuthController } from "../controller/controller";
 import { User } from "../../../config/entities/users";
 import { Auth } from "../model/auth.interface";
-import { validarJWT } from "../../users/middlewares/jwt-validator";
+import { validarJWT } from "../../../common/middlewares/jwt-validator";
 import { check } from "express-validator";
 
 
