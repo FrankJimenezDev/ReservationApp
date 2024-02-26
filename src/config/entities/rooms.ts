@@ -6,7 +6,7 @@ import { Reserve } from "./reserves";
 export class Room extends BaseEntity {
 
     @PrimaryColumn({unique : true})
-    id!: number 
+    id!: string
 
     @Column()
     size!: string 
