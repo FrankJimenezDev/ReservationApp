@@ -16,11 +16,11 @@ export class Reserve extends BaseEntity {
     // campos de relacion
     @ManyToOne(() => User, user => user.id)
     @JoinColumn()
-    userid!: User;
+    user!: User;
 
     @OneToOne(() => Room, room => room.id)
     @JoinColumn()
-    roomid!: Room;
+    room!: Room;
 }
 
 //Entity to use on dbconnection for Products

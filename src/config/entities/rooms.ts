@@ -27,7 +27,7 @@ export class Room extends BaseEntity {
 
     @OneToOne(() => Reserve, reserve => reserve.id)
     @JoinColumn()
-    reserveid!: Reserve;
+    reserve!: Reserve;
 }
 
 //Entity to use on dbconnection for Products
