@@ -13,6 +13,21 @@ export class Reserve extends BaseEntity {
     @Column({ type: "boolean", default: true })
     status!: boolean
 
+    @Column({ type : "date"})
+    createdAt: Date = new Date();
+
+    @Column({ type : "date"})
+    updatedAt: Date = new Date();
+
+    @Column({ type : "date"})
+    reserveday!: Date
+
+    @Column({ type : "date"})
+    checkin!: Date
+
+    @Column({ type : "date"})
+    checkout!: Date
+
     // campos de relacion
     @ManyToOne(() => User, user => user.id)
     @JoinColumn()
