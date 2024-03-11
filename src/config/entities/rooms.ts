@@ -1,5 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { Reserve } from "./reserves";
+import { RoomStatus } from "./status";
 
 //Entity to use on dbconnection for Products
 @Entity()
@@ -11,8 +12,8 @@ export class Room extends BaseEntity {
     @Column()
     size!: string 
 
-    @Column({ type: "boolean", default: false})
-    status!: boolean
+    @Column({ type: "int", default: 0})
+    status!: number
 
     @Column()
     price!: number
@@ -28,6 +29,10 @@ export class Room extends BaseEntity {
     @OneToOne(() => Reserve, reserve => reserve.id)
     @JoinColumn()
     reserve!: Reserve;
+
+    @ManyToOne(() => RoomStatus, status => status.number)
+    @JoinColumn({ name: "status" })
+    userStatus!: RoomStatus;
 }
 
 //Entity to use on dbconnection for Products
