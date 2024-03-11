@@ -1,20 +1,24 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { User } from './users';
 import { Room } from './rooms';
+import { Reserve } from './reserves';
 
 @Entity()
 export class ReserveStatus {
   @PrimaryColumn()
-  number!: number;
+  id!: number;
 
   @Column({ nullable: false, type: 'varchar', length: 45 })
   status!: string;
+
+  @OneToMany(() => Reserve, reserve => reserve.status)
+  Reserves!: Reserve[];
 }
 
 @Entity()
 export class RoomStatus {
   @PrimaryColumn()
-  number!: number;
+  id!: number;
 
   @Column({ nullable: false, type: 'varchar', length: 45 })
   status!: string;
@@ -26,7 +30,7 @@ export class RoomStatus {
 @Entity()
 export class UserStatus {
   @PrimaryColumn()
-  number!: number;
+  id!: number;
 
   @Column({ nullable: false, type: 'varchar', length: 45 })
   status!: string;

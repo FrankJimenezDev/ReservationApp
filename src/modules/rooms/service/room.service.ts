@@ -80,13 +80,13 @@ export class RoomService implements Service<Room> {
 
         if (!room.status) {
             Room.merge(room, {
-                status: true
+                status: 1
             })
             await Room.save(room);
             return room;
         }
 
-        Room.merge(room, { status: false })
+        Room.merge(room, { status: 0 })
         await Room.save(room);
         return room;
     }

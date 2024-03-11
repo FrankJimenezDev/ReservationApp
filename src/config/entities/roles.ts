@@ -4,11 +4,11 @@ import { User } from './users';
 @Entity()
 export class UserRol {
   @PrimaryColumn()
-  rolcode!: number;
+  id!: number;
 
   @Column({ nullable: true, type: 'varchar', length: 45 })
   rol!: string;
 
-  @OneToMany(() => User, user => user.rolcode)
+  @OneToMany(() => User, user => user.rol)
   users!: User[];
 }

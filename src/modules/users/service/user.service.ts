@@ -51,13 +51,13 @@ export class UserService implements Service<User> {
 
         if (!user.status) {
             User.merge(user, {
-                status: true
+                status: 1
             })
             await User.save(user);
             return user;
         }
 
-        User.merge(user, { status: false })
+        User.merge(user, { status: 0 })
         await User.save(user);
         return user;
 

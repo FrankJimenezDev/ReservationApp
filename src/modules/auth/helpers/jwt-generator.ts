@@ -7,7 +7,7 @@ export const generarJWT = (payload: Payload): Promise<string> => {
 
         jwt.sign({
             id: payload.id,
-            rol: payload.rolcode,
+            rol: payload.rol,
             status: payload.status
         },
             process.env.KEY_TOKEN || "",

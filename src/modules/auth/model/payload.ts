@@ -1,5 +1,5 @@
 export type Payload = {
     id: string
-    rolcode: number
-    status: boolean
+    rol: number
+    status: number
 }
