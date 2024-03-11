@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
-import { Reserve } from "./reserves";
 import { UserRol } from "./roles";
+import { UserStatus } from "./status";
 
 //Entity to use on dbconnection for Products
 @Entity()
@@ -37,5 +37,9 @@ export class User extends BaseEntity {
     @ManyToOne(() => UserRol, rol => rol.rolcode)
     @JoinColumn({ name: "rolcode" })
     userRole!: UserRol;
+
+    @ManyToOne(() => UserStatus, status => status.number)
+    @JoinColumn({ name: "status" })
+    userStatus!: UserStatus;
 }
 
