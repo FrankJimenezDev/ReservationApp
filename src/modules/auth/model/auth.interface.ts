@@ -15,7 +15,7 @@ export type AuthLogIn = {
         name: string;
         lastname: string;
         email: string;
-        rol: boolean;
+        rolcode: number;
     },
     token : string
 }

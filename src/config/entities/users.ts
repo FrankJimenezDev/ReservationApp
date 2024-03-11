@@ -1,6 +1,7 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 import { Reserve } from "./reserves";
+import { UserRol } from "./roles";
 
 //Entity to use on dbconnection for Products
 @Entity()
@@ -24,8 +25,8 @@ export class User extends BaseEntity {
     @Column({ type: "boolean", default: true})
     status!: boolean 
     
-    @Column({ type: "boolean", default: false})
-    rol!: boolean
+    @Column({ type: "int", default: 0})
+    rolcode!: number
 
     @CreateDateColumn()
     createdAt: Date = new Date()
@@ -33,11 +34,8 @@ export class User extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date = new Date()
 
-    //campos de relacion
-
-    @OneToMany(() => Reserve, reserve => reserve.id)
-    @JoinColumn()
-    createdReservers!: Reserve[];
+    @ManyToOne(() => UserRol, rol => rol.rolcode)
+    @JoinColumn({ name: "rolcode" })
+    userRole!: UserRol;
 }
 
-//Entity to use on dbconnection for Products
