@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
-import jwt from 'jsonwebtoken';
+import { verify } from './jwt-validator';
 
 
 export const rolAuth = (req : Request, res : Response, next : express.NextFunction) => {
 
     const token = req.cookies.token
-    const payload : any = jwt.verify(token || '', process.env.KEY_TOKEN || "")
+    const payload : any = verify(token)
     const isAdmin = payload.rol
     const idUser = payload.id
 

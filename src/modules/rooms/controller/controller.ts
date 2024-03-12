@@ -60,7 +60,6 @@ export class RoomsController {
         // if (!errors.isEmpty()) {
         //     return res.status(400).json(errors)
         // }
-
         const { body } = req;
         try {
             const result = await this.service.create!(body)

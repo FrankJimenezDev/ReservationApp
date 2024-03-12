@@ -29,17 +29,23 @@ export class Reserve extends BaseEntity {
     @Column({ type: "date", nullable: true})
     checkout!: Date
 
+    // @Column({type: "int"})
+    // room!: number
+
+    // @Column({type : "varchar", length: 45})
+    // user!: string
+
     // campos de relacion
     @ManyToOne(() => User, user => user.id)
     @JoinColumn()
-    user!: User;
+    userid!: User;
 
     @OneToOne(() => Room, room => room.id)
     @JoinColumn()
-    room!: Room;
+    roomid!: Room;
 
     @ManyToOne(() => ReserveStatus, status => status.id)
-    @JoinColumn({ name: "status" })
+    @JoinColumn()
     reserveStatus!: ReserveStatus;
 }
 

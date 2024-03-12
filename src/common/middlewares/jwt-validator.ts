@@ -4,6 +4,11 @@ import express from 'express';
 import { User } from '../../config/entities/users';
 
 
+export const verify = (token : any) => {
+    return jwt.verify(token || '', process.env.KEY_TOKEN || "")
+}
+
+
 export const validarJWT = async (req: Request, res: Response, next: express.NextFunction) => {
 
     const token = req.cookies.token;
@@ -15,7 +20,9 @@ export const validarJWT = async (req: Request, res: Response, next: express.Next
     }
 
     try {
-        const payload : any = jwt.verify(token || '', process.env.KEY_TOKEN || "")
+        // const payload : any = jwt.verify(token || '', process.env.KEY_TOKEN || "")
+
+        const payload : any = verify(token)
 
         const usuario = await User.findOneBy({
             id: payload.id
