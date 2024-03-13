@@ -5,6 +5,7 @@ import cors from "cors"
 import users from "../../modules/users/routes/routes"
 import auth from "../../modules/auth/routes/routes"
 import room from "../../modules/rooms/routes/routes"
+import reserve from "../../modules/reserve/routes/routes"
 import { db } from "../../config/db/dbconnection";
 
 export class ExpressServer {
@@ -13,7 +14,8 @@ export class ExpressServer {
     private path = {
         users: '/api/users',
         auth: '/api/auth',
-        room: '/api/room'
+        room: '/api/room',
+        reserve: '/api/reserve'
     }
 
     constructor() {
@@ -45,6 +47,7 @@ export class ExpressServer {
         this.app.use(this.path.users, users);
         this.app.use(this.path.auth, auth);
         this.app.use(this.path.room, room);
+        this.app.use(this.path.reserve, reserve);
     }
 
     listen() {

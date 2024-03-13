@@ -24,10 +24,10 @@ export class Reserve extends BaseEntity {
     reserveday!: Date
 
     @Column({ type: "date", nullable: true})
-    checkin!: Date
+    checkin?: Date
 
     @Column({ type: "date", nullable: true})
-    checkout!: Date
+    checkout?: Date
 
     // @Column({type: "int"})
     // room!: number
@@ -37,15 +37,15 @@ export class Reserve extends BaseEntity {
 
     // campos de relacion
     @ManyToOne(() => User, user => user.id)
-    @JoinColumn()
+    @JoinColumn({name : "user"})
     userid!: User;
 
     @OneToOne(() => Room, room => room.id)
-    @JoinColumn()
+    @JoinColumn({ name: "room"})
     roomid!: Room;
 
     @ManyToOne(() => ReserveStatus, status => status.id)
-    @JoinColumn()
+    @JoinColumn({ name: "status"})
     reserveStatus!: ReserveStatus;
 }
 

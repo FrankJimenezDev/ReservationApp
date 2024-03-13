@@ -27,7 +27,6 @@ export class Room extends BaseEntity {
     // campos de relacion
 
     @OneToOne(() => Reserve, reserve => reserve.id)
-    @JoinColumn({name: "reserveId"})
     roomReserve!: Reserve;
 
     @ManyToOne(() => RoomStatus, status => status.id)
