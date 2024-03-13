@@ -31,7 +31,7 @@ export class Room extends BaseEntity {
 
     @ManyToOne(() => RoomStatus, status => status.id)
     @JoinColumn({ name: "status" })
-    userStatus!: RoomStatus;
+    roomStatus!: RoomStatus;
 }
 
 //Entity to use on dbconnection for Products

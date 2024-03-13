@@ -28,7 +28,7 @@ export class UsersController {
         }
     }
 
-    async getOneUsers(req: Request, res: Response) {
+    async getOneUserById(req: Request, res: Response) {
         const { id } = req.params;
 
         try {

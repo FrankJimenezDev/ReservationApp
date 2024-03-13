@@ -1,6 +1,10 @@
 import { Reserve } from "../../../config/entities/reserves";
 
 export class ReserveService implements Service<Reserve> {
+    
+    getAllByStatus(status: number): Promise<Reserve> {
+        throw new Error("Method not implemented.");
+    }
     async getAll(): Promise<Reserve[]> {
         throw new Error("Method not implemented.");
     }

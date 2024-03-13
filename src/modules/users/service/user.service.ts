@@ -1,6 +1,18 @@
 import { User } from "../../../config/entities/users";
 
 export class UserService implements Service<User> {
+    async getAllByRol?(rol: number): Promise<Array<User>> {
+        throw new Error("Method not implemented.");
+    }
+    async getAllByStatus(status: number): Promise<Array<User>> {
+        const users = await User.find({
+            where: status
+        })
+        if (users.length === 0) {
+            throw new Error(`No se encontraron usuarios registrados`)
+        }
+        return users
+    }
     async getAll(): Promise<User[]> {
 
         const users = await User.find()
