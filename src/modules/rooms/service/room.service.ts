@@ -1,6 +1,9 @@
 import { Room } from "../../../config/entities/rooms";
 
 export class RoomService implements Service<Room> {
+    getAllByStatus(status: number): Promise<Room[]> {
+        throw new Error("Method not implemented.");
+    }
     async getAll(): Promise<Room[]> {
         const rooms = await Room.find()
         if (rooms.length === 0) {

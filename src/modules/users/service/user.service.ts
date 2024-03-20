@@ -6,7 +6,7 @@ export class UserService implements Service<User> {
     }
     async getAllByStatus(status: number): Promise<Array<User>> {
         const users = await User.find({
-            where: status
+            where: {status}
         })
         if (users.length === 0) {
             throw new Error(`No se encontraron usuarios registrados`)
