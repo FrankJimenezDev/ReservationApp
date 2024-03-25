@@ -13,7 +13,7 @@ export const db = new DataSource({
     username: 'user',
     password: 'pass',
     database: 'reservationApp',
-    synchronize: true,
+    synchronize: false,
     entities: [
         User, Reserve, Room, RoomStatus, ReserveStatus, UserStatus, UserRol
     ],
