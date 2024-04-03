@@ -2,13 +2,13 @@ import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { User } from './users';
 
 @Entity()
-export class UserRol {
+export class Roles {
   @PrimaryColumn()
-  id!: number;
+  role_id!: number;
 
   @Column({ nullable: true, type: 'varchar', length: 45 })
-  rol!: string;
+  role_name!: string;
 
-  @OneToMany(() => User, user => user.rol)
-  users!: User[];
+  // @OneToMany(() => User, user => user.rol_id)
+  // users!: User[];
 }

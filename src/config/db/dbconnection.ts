@@ -3,18 +3,20 @@ import "reflect-metadata"
 import { User } from "../entities/users"
 import { Reserve } from "../entities/reserves"
 import { Room } from "../entities/rooms"
-import { ReserveStatus, RoomStatus, UserStatus } from "../entities/status"
-import { UserRol } from "../entities/roles"
+import { Status } from "../entities/status"
+import { Roles } from "../entities/roles"
+import { Currency } from "../entities/currency"
+import { RoomsReserve } from "../entities/rooms_reserve"
 
 export const db = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
-    username: 'user',
-    password: 'pass',
+    username: 'root',
+    password: '123456',
     database: 'reservationApp',
-    synchronize: false,
+    synchronize: true,
     entities: [
-        User, Reserve, Room, RoomStatus, ReserveStatus, UserStatus, UserRol
+        User, Reserve, Room, Status, Roles, Currency, RoomsReserve
     ],
 })

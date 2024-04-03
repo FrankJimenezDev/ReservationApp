@@ -15,15 +15,13 @@ export class ReserveService implements Service<Reserve> {
 
     async create(body: Reserve): Promise<Reserve> {
         const {
-            userid,
-            reserveday,
-            roomid,
+            user_id,
+            reserveday
         } = body
 
         const reserve = Reserve.create({
-            userid,
-            reserveday,
-            roomid
+            user_id,
+            reserveday
         })
 
         await Reserve.save(reserve)

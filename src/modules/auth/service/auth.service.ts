@@ -12,10 +12,8 @@ export class AuthService implements Auth<User> {
             name,
             lastname,
             email,
-            rol
+            rol_id
         } = body
-
-
 
         const password = await encrypt(body.password);
 
@@ -24,7 +22,7 @@ export class AuthService implements Auth<User> {
             lastname,
             email,
             password,
-            rol
+            rol_id
         })
 
         await user.save();
@@ -54,17 +52,17 @@ export class AuthService implements Auth<User> {
 
         // Se crea el token
         const token = await generarJWT({
-            rol: user.rol,
-            id: user.id,
-            status: user.status
+            rol: user.rol_id,
+            id: user.user_id,
+            status: user.status_id
         });
 
         const userRelevantData = {
-            id: user.id,
+            id: user.user_id,
             name: user.name,
             lastname: user.lastname,
             email: user.email,
-            rol: user.rol
+            rol: user.rol_id
         }
 
         return {

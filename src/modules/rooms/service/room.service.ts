@@ -11,14 +11,14 @@ export class RoomService implements Service<Room> {
         }
         return rooms;
     }
-    async getOne(id: string): Promise<Room> {
+    async getOne(room_id: string): Promise<Room> {
 
         const room = await Room.findOneBy({
-            id
+            room_id
         });
 
         if (!room) {
-            throw new Error(`La habitacion ${id} no existe`);
+            throw new Error(`La habitacion ${room_id} no existe`);
         }
 
         return room;
@@ -27,14 +27,15 @@ export class RoomService implements Service<Room> {
 
     async create(body: Room): Promise<Room> {
         const {
-            id,
+            room_id,
             size,
-            status,
+            status_id,
             price,
+            currency_id
         } = body;
 
         const searchRoom = await Room.findOneBy({
-            id
+            room_id
         })
 
         if (searchRoom) {
@@ -42,10 +43,11 @@ export class RoomService implements Service<Room> {
         }
 
         const room = Room.create({
-            id,
+            room_id,
             size,
-            status,
-            price
+            status_id,
+            price,
+            currency_id
         })
 
         await Room.save(room)
@@ -57,13 +59,13 @@ export class RoomService implements Service<Room> {
         return room;
     }
 
-    async update(id: string, body: Room): Promise<Room> {
+    async update(room_id: string, body: Room): Promise<Room> {
         const room = await Room.findOneBy({
-            id
+            room_id
         });
 
         if (!room) {
-            throw new Error(`La habitacion ${id} no existe`);
+            throw new Error(`La habitacion ${room_id} no existe`);
         }
 
         Room.merge(room, body)
@@ -71,25 +73,25 @@ export class RoomService implements Service<Room> {
         return room
     }
 
-    async delete(id: string): Promise<Room> {
+    async delete(room_id: string): Promise<Room> {
 
         const room = await Room.findOneBy({
-            id
+            room_id
         });
 
         if (!room) {
-            throw new Error(`La habitacion ${id} no existe`);
+            throw new Error(`La habitacion ${room_id} no existe`);
         }
 
-        if (!room.status) {
+        if (!room.status_id) {
             Room.merge(room, {
-                status: 1
+                status_id: 1
             })
             await Room.save(room);
             return room;
         }
 
-        Room.merge(room, { status: 0 })
+        Room.merge(room, { status_id: 0 })
         await Room.save(room);
         return room;
     }

@@ -1,18 +1,21 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
-import { Room } from './rooms';
 import { User } from "./users";
-import { ReserveStatus } from "./status";
+import { Status } from "./status";
+import { RoomsReserve } from "./rooms_reserve";
 
 //Entity to use on dbconnection for Products
 @Entity()
 export class Reserve extends BaseEntity {
 
     @PrimaryColumn({ unique: true })
-    id: string = uuidv4()
+    reserve_id: string = uuidv4()
 
     @Column({ type: "int", default: 1 })
-    status!: number
+    status_id!: number
+
+    @Column({type: "varchar", length: "255"})
+    user_id!: string
 
     @CreateDateColumn()
     createdAt: Date = new Date();
@@ -29,24 +32,17 @@ export class Reserve extends BaseEntity {
     @Column({ type: "date", nullable: true})
     checkout?: Date
 
-    // @Column({type: "int"})
-    // room!: number
-
-    // @Column({type : "varchar", length: 45})
-    // user!: string
-
     // campos de relacion
-    @ManyToOne(() => User, user => user.id)
-    @JoinColumn({name : "user"})
+    @ManyToOne(() => User, user => user.user_id)
+    @JoinColumn({ name: "user_id"})
     userid!: User;
 
-    @OneToOne(() => Room, room => room.id)
-    @JoinColumn({ name: "room"})
-    roomid!: Room;
+    @OneToMany(() => RoomsReserve, reserve => reserve.reserve_id)
+    reserveRoom!: Reserve[];
 
-    @ManyToOne(() => ReserveStatus, status => status.id)
-    @JoinColumn({ name: "status"})
-    reserveStatus!: ReserveStatus;
+    @ManyToOne(() => Status, status => status.status_id)
+    @JoinColumn({ name: "status_id"})
+    reserveStatus!: Status;
 }
 
 //Entity to use on dbconnection for Products

@@ -1,19 +1,19 @@
-CREATE TABLE ROLES (
+CREATE TABLE roles (
     role_id INT PRIMARY KEY,
     role_name VARCHAR(255)
 );
 
-CREATE TABLE STATUS (
+CREATE TABLE status (
     status_id INT PRIMARY KEY,
     status_name VARCHAR(255)
 );
 
-CREATE TABLE CURRENCY (
+CREATE TABLE currency (
     currency_id INT PRIMARY KEY,
     currency_name VARCHAR(255)
 );
 
-CREATE TABLE USERS (
+CREATE TABLE users (
     user_id INT PRIMARY KEY,
     name VARCHAR(255),
     lastname VARCHAR(255),
@@ -27,7 +27,7 @@ CREATE TABLE USERS (
     FOREIGN KEY (status_id) REFERENCES STATUS(status_id)
 );
 
-CREATE TABLE RESERVES (
+CREATE TABLE reserves (
     reserve_id INT PRIMARY KEY,
     status_id INT,
     user_id INT,
@@ -40,7 +40,7 @@ CREATE TABLE RESERVES (
     FOREIGN KEY (user_id) REFERENCES USERS(user_id)
 );
 
-CREATE TABLE ROOMS (
+CREATE TABLE rooms (
     room_id INT PRIMARY KEY,
     status_id INT,
     size INT,
@@ -51,7 +51,7 @@ CREATE TABLE ROOMS (
     FOREIGN KEY (status_id) REFERENCES STATUS(status_id)
 );
 
-CREATE TABLE ROOMS_RESERVES (
+CREATE TABLE rooms_reserves (
     room_id INT,
     reserve_id INT,
     PRIMARY KEY (room_id, reserve_id),

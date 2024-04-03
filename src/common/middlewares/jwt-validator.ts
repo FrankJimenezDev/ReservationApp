@@ -25,7 +25,7 @@ export const validarJWT = async (req: Request, res: Response, next: express.Next
         const payload : any = verify(token)
 
         const usuario = await User.findOneBy({
-            id: payload.id
+            user_id: payload.id
         })
 
         if (!usuario) {
@@ -34,7 +34,7 @@ export const validarJWT = async (req: Request, res: Response, next: express.Next
             })
         }
 
-        payload.id = usuario.id
+        payload.id = usuario.user_id
 
         next()
     } catch (error) {

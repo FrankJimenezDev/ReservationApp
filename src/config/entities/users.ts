@@ -1,7 +1,7 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
-import { UserRol } from "./roles";
-import { UserStatus } from "./status";
+import { Roles } from "./roles";
+import { Status } from "./status";
 import { Reserve } from "./reserves";
 
 //Entity to use on dbconnection for Products
@@ -9,7 +9,7 @@ import { Reserve } from "./reserves";
 export class User extends BaseEntity {
 
     @PrimaryColumn({unique : true})
-    id: string = uuidv4()
+    user_id: string = uuidv4()
 
     @Column()
     name!: string 
@@ -21,13 +21,13 @@ export class User extends BaseEntity {
     email!: string
     
     @Column()
-    password!: string
-    
-    @Column({ type: "int", default: 1})
-    status!: number 
+    password!: string 
     
     @Column({ type: "int", default: 0})
-    rol!: number
+    rol_id!: number
+
+    @Column({ type: "int", default: 1})
+    status_id!: number
 
     @CreateDateColumn()
     createdAt: Date = new Date()
@@ -35,15 +35,15 @@ export class User extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date = new Date()
 
-    @ManyToOne(() => UserRol, rol => rol.id)
-    @JoinColumn({ name: "rol" })
-    userRole!: UserRol;
+    @ManyToOne(() => Roles, rol => rol.role_id)
+    @JoinColumn({ name: "rol_id" })
+    userRole!: Roles;
 
-    @ManyToOne(() => UserStatus, status => status.id)
-    @JoinColumn({ name: "status" })
-    userStatus!: UserStatus;
+    @ManyToOne(() => Status, status => status.status_id)
+    @JoinColumn({ name: "status_id" })
+    userStatus!: Status;
 
-    @OneToMany(() => Reserve, reserve => reserve.id)
+    @OneToMany(() => Reserve, reserve => reserve.reserve_id)
     user!: Reserve[];
 }
 
