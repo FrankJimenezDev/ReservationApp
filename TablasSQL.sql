@@ -45,7 +45,7 @@ CREATE TABLE ROOMS (
     status_id INT,
     size INT,
     price DECIMAL(10,2),
-    currency VARCHAR(3),
+    currency_id VARCHAR(3),
     createdAt TIMESTAMP,
     updatedAt TIMESTAMP,
     FOREIGN KEY (status_id) REFERENCES STATUS(status_id)
