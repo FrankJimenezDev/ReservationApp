@@ -9,7 +9,7 @@ import { rolAuth } from "../../../common/middlewares/rol-validator";
 const routes = Router()
 const service : Service<User> = new UserService()
 
-routes.get('/', validarJWT, rolAuth, ( req, res : Response)=> new UsersController(service).getAllUsers(res))
+routes.get('/', validarJWT, rolAuth, ( req, res : Response)=> new UsersController(service).getAllUsers(req, res))
 routes.get('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new UsersController(service).getOneUserById(req, res))
 routes.put('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new UsersController(service).updateUser(req, res))
 routes.delete('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new UsersController(service).deleteUsers(req, res))

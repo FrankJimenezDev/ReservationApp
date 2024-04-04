@@ -1,6 +1,6 @@
-SELECT * FROM reservationApp.USERS;
+SELECT * FROM reservationApp.user;
 
-SELECT USERS.user_id, USERS.name, USERS.lastname, ROLES.role_name as rol, STATUS.status_name as status, USERS.createdAt, USERS.updatedAt
-FROM USERS
-LEFT JOIN ROLES ON ROLES.role_id=USERS.rol_id
-LEFT JOIN STATUS ON STATUS.status_id=USERS.user_id;
+SELECT user.user_id as id, user.name, user.lastname, user.email, roles.role_name as rol, status.status_name as status, user.createdAt, user.updatedAt
+FROM user
+LEFT JOIN roles ON roles.role_id=user.rol_id
+LEFT JOIN status ON status.status_id=user.status_id;

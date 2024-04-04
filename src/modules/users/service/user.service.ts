@@ -1,27 +1,35 @@
 import { User } from "../../../config/entities/users";
 
 export class UserService implements Service<User> {
-    async getAllByRol?(rol: number): Promise<Array<User>> {
-        throw new Error("Method not implemented.");
-    }
-    async getAllByStatus(status_id: number): Promise<Array<User>> {
-        const users = await User.find({
-            where: {status_id}
-        })
-        if (users.length === 0) {
-            throw new Error(`No se encontraron usuarios registrados`)
-        }
-        return users
-    }
-    async getAll(): Promise<User[]> {
 
-        const users = await User.find()
-        if (users.length === 0) {
-            throw new Error(`No se encontraron usuarios registrados`)
+    async getAll(status? : number, rol? : number): Promise<User[]> {
+
+        const query = User
+        .createQueryBuilder('user')
+        .select([
+            'user.user_id',
+            'user.name',
+            'user.lastname',
+            'user.email',
+            'roles.role_name',
+            'status.status_name',
+            'user.createdAt',
+            'user.updatedAt'
+        ])
+        .leftJoinAndSelect('user.userRole', 'roles')
+        .leftJoinAndSelect('user.userStatus', 'status')
+
+        if (status !== undefined) {
+            query.andWhere('user.status_id = :status', { status: status });
         }
+        if (rol !== undefined) {
+            query.andWhere('user.rol_id = :rol', { rol: rol });
+        }        
+        const users = await query.getMany();
         return users
 
     }
+
     async getOne(user_id: string): Promise<User> {
 
         const user = await User.findOneBy({
@@ -61,15 +69,15 @@ export class UserService implements Service<User> {
             throw new Error(`No se encontro usuario con el id: ${user_id}`);
         }
 
-        if (!user.status_id) {
+        if (user.status_id !== 7) {
             User.merge(user, {
-                status_id: 1
+                status_id: 7
             })
             await User.save(user);
             return user;
         }
 
-        User.merge(user, { status_id: 0 })
+        User.merge(user, { status_id: 1 })
         await User.save(user);
         return user;
 

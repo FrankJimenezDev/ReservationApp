@@ -5,9 +5,16 @@ export class UsersController {
 
     constructor(private service: Service<User>) { }
 
-    async getAllUsers(res: Response) {
+    async getAllUsers(req: Request ,res: Response) {
+
+        const statusString: string | undefined = req.query.status as string | undefined;
+        const rolString: string | undefined = req.query.rol as string | undefined;
+
+        const status: number | undefined = statusString !== undefined ? parseInt(statusString) : undefined;
+        const rol: number | undefined = rolString !== undefined ? parseInt(rolString) : undefined;
+
         try {
-            const result = await this.service.getAll()
+            const result = await this.service.getAll(status, rol)
             res.status(200).json({
                 success: true,
                 result
