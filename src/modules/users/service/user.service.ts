@@ -1,30 +1,35 @@
 import { User } from "../../../config/entities/users";
+import { UpdateUserDto } from "../model/updateDto";
+import { db } from "../../../config/db/dbconnection";
+import { encrypt } from "../../auth/helpers/bcrypt";
 
 export class UserService implements Service<User> {
 
-    async getAll(status? : number, rol? : number): Promise<User[]> {
+    async getAll(status?: number, rol?: number): Promise<User[]> {
 
-        const query = User
-        .createQueryBuilder('user')
-        .select([
-            'user.user_id',
-            'user.name',
-            'user.lastname',
-            'user.email',
-            'roles.role_name',
-            'status.status_name',
-            'user.createdAt',
-            'user.updatedAt'
-        ])
-        .leftJoinAndSelect('user.userRole', 'roles')
-        .leftJoinAndSelect('user.userStatus', 'status')
+        const userRepository = db.getRepository(User)
+
+        const query = userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.user_id',
+                'user.name',
+                'user.lastname',
+                'user.email',
+                'roles.role_name',
+                'status.status_name',
+                'user.createdAt',
+                'user.updatedAt'
+            ])
+            .leftJoinAndSelect('user.userRole', 'roles')
+            .leftJoinAndSelect('user.userStatus', 'status')
 
         if (status !== undefined) {
             query.andWhere('user.status_id = :status', { status: status });
         }
         if (rol !== undefined) {
             query.andWhere('user.rol_id = :rol', { rol: rol });
-        }        
+        }
         const users = await query.getMany();
         return users
 
@@ -32,53 +37,123 @@ export class UserService implements Service<User> {
 
     async getOne(user_id: string): Promise<User> {
 
-        const user = await User.findOneBy({
-            user_id
-        });
+        const userRepository = db.getRepository(User)
 
-        if (!user) {
-            throw new Error(`No existe usuario con el id: ${user_id}`)
-        }
+        const query = userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.user_id',
+                'user.name',
+                'user.lastname',
+                'user.email',
+                'roles.role_name',
+                'status.status_name',
+                'user.createdAt',
+                'user.updatedAt'
+            ])
+            .leftJoinAndSelect('user.userRole', 'roles')
+            .leftJoinAndSelect('user.userStatus', 'status')
+            .where('user.user_id = :id', { id: user_id })
 
+        const user = await query.getOneOrFail()
         return user;
-
     }
 
-    async update(user_id: string, body: User): Promise<User> {
+    async update(user_id: string, body: UpdateUserDto): Promise<User> {
 
-        const user = await User.findOneBy({
+        const userRepository = db.getRepository(User)
+
+        const userToUpdate = await userRepository.findOneBy({
             user_id
         })
-
-        if (!user) {
-            throw new Error (`No existe usuario con el id: ${user_id}`);
+        if (!userToUpdate) {
+            throw new Error(`No existe usuario con el id: ${user_id}`);
         }
+        if (body.password) {
+            const password = await encrypt(body.password);
+            body.password = password
+        }
+        userRepository.merge(userToUpdate, body)
+        await User.save(userToUpdate);
 
-        User.merge(user, body)
-        await User.save(user);
+        const query = userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.user_id',
+                'user.name',
+                'user.lastname',
+                'user.email',
+                'roles.role_name',
+                'status.status_name',
+                'user.createdAt',
+                'user.updatedAt'
+            ])
+            .leftJoinAndSelect('user.userRole', 'roles')
+            .leftJoinAndSelect('user.userStatus', 'status')
+            .where('user.user_id = :id', { id: user_id })
+
+        const user = await query.getOneOrFail()
         return user;
     }
 
     async delete(user_id: string): Promise<User> {
 
-        const user = await User.findOneBy({
+        const userRepository = db.getRepository(User)
+
+        const userToDelete = await userRepository.findOneBy({
             user_id
         })
 
-        if (!user) {
+        if (!userToDelete) {
             throw new Error(`No se encontro usuario con el id: ${user_id}`);
         }
 
-        if (user.status_id !== 7) {
-            User.merge(user, {
+        if (userToDelete.status_id !== 7) {
+            User.merge(userToDelete, {
                 status_id: 7
             })
-            await User.save(user);
+
+            await User.save(userToDelete);
+            const query = userRepository
+                .createQueryBuilder('user')
+                .select([
+                    'user.user_id',
+                    'user.name',
+                    'user.lastname',
+                    'user.email',
+                    'roles.role_name',
+                    'status.status_name',
+                    'user.createdAt',
+                    'user.updatedAt'
+                ])
+                .leftJoinAndSelect('user.userRole', 'roles')
+                .leftJoinAndSelect('user.userStatus', 'status')
+                .where('user.user_id = :id', { id: user_id })
+
+            const user = await query.getOneOrFail()
             return user;
         }
 
-        User.merge(user, { status_id: 1 })
-        await User.save(user);
+        User.merge(userToDelete, { status_id: 1 })
+        await User.save(userToDelete);
+
+        const query = userRepository
+            .createQueryBuilder('user')
+            .select([
+                'user.user_id',
+                'user.name',
+                'user.lastname',
+                'user.email',
+                'roles.role_name',
+                'status.status_name',
+                'user.createdAt',
+                'user.updatedAt'
+            ])
+            .leftJoinAndSelect('user.userRole', 'roles')
+            .leftJoinAndSelect('user.userStatus', 'status')
+            .where('user.user_id = :id', { id: user_id })
+
+        const user = await query.getOneOrFail()
         return user;
 
     }

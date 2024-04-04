@@ -15,7 +15,7 @@ export const db = new DataSource({
     username: 'root',
     password: '123456',
     database: 'reservationApp',
-    synchronize: false,
+    synchronize: true,
     entities: [
         User, Reserve, Room, Status, Roles, Currency, RoomsReserve
     ],

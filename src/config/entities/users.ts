@@ -24,7 +24,7 @@ export class User extends BaseEntity {
     password!: string 
     
     @Column({ type: "int", default: 0})
-    rol_id!: number
+    role_id!: number
 
     @Column({ type: "int", default: 1})
     status_id!: number
@@ -36,7 +36,7 @@ export class User extends BaseEntity {
     updatedAt: Date = new Date()
 
     @ManyToOne(() => Roles, rol => rol.role_id)
-    @JoinColumn({ name: "rol_id" })
+    @JoinColumn({ name: "role_id" })
     userRole!: Roles;
 
     @ManyToOne(() => Status, status => status.status_id)
