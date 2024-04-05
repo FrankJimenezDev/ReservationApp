@@ -2,6 +2,7 @@ import { User } from "../../../config/entities/users";
 import { UpdateUserDto } from "../model/updateDto";
 import { db } from "../../../config/db/dbconnection";
 import { encrypt } from "../../auth/helpers/bcrypt";
+import { select } from "../model/querySelect";
 
 export class UserService implements Service<User> {
 
@@ -11,16 +12,7 @@ export class UserService implements Service<User> {
 
         const query = userRepository
             .createQueryBuilder('user')
-            .select([
-                'user.user_id',
-                'user.name',
-                'user.lastname',
-                'user.email',
-                'roles.role_name',
-                'status.status_name',
-                'user.createdAt',
-                'user.updatedAt'
-            ])
+            .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
             .leftJoinAndSelect('user.userStatus', 'status')
 
@@ -28,7 +20,7 @@ export class UserService implements Service<User> {
             query.andWhere('user.status_id = :status', { status: status });
         }
         if (rol !== undefined) {
-            query.andWhere('user.rol_id = :rol', { rol: rol });
+            query.andWhere('user.role_id = :rol', { rol: rol });
         }
         const users = await query.getMany();
         return users
@@ -41,16 +33,7 @@ export class UserService implements Service<User> {
 
         const query = userRepository
             .createQueryBuilder('user')
-            .select([
-                'user.user_id',
-                'user.name',
-                'user.lastname',
-                'user.email',
-                'roles.role_name',
-                'status.status_name',
-                'user.createdAt',
-                'user.updatedAt'
-            ])
+            .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
             .leftJoinAndSelect('user.userStatus', 'status')
             .where('user.user_id = :id', { id: user_id })
@@ -78,16 +61,7 @@ export class UserService implements Service<User> {
 
         const query = userRepository
             .createQueryBuilder('user')
-            .select([
-                'user.user_id',
-                'user.name',
-                'user.lastname',
-                'user.email',
-                'roles.role_name',
-                'status.status_name',
-                'user.createdAt',
-                'user.updatedAt'
-            ])
+            .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
             .leftJoinAndSelect('user.userStatus', 'status')
             .where('user.user_id = :id', { id: user_id })
@@ -116,16 +90,7 @@ export class UserService implements Service<User> {
             await User.save(userToDelete);
             const query = userRepository
                 .createQueryBuilder('user')
-                .select([
-                    'user.user_id',
-                    'user.name',
-                    'user.lastname',
-                    'user.email',
-                    'roles.role_name',
-                    'status.status_name',
-                    'user.createdAt',
-                    'user.updatedAt'
-                ])
+                .select(select)
                 .leftJoinAndSelect('user.userRole', 'roles')
                 .leftJoinAndSelect('user.userStatus', 'status')
                 .where('user.user_id = :id', { id: user_id })
@@ -139,16 +104,7 @@ export class UserService implements Service<User> {
 
         const query = userRepository
             .createQueryBuilder('user')
-            .select([
-                'user.user_id',
-                'user.name',
-                'user.lastname',
-                'user.email',
-                'roles.role_name',
-                'status.status_name',
-                'user.createdAt',
-                'user.updatedAt'
-            ])
+            .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
             .leftJoinAndSelect('user.userStatus', 'status')
             .where('user.user_id = :id', { id: user_id })
