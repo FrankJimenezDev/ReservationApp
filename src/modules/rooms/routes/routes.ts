@@ -9,7 +9,7 @@ import { Room } from "../../../config/entities/rooms";
 const routes = Router()
 const service : Service<Room> = new RoomService()
 
-routes.get('/', validarJWT, rolAuth, ( req, res : Response)=> new RoomsController(service).getAllUsers(res))
+routes.get('/', validarJWT, rolAuth, ( req : Request, res : Response)=> new RoomsController(service).getAllUsers(req, res))
 routes.get('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new RoomsController(service).getOneUsers(req, res))
 routes.post('/', validarJWT, rolAuth, (req : Request, res : Response)=> new RoomsController(service).create(req, res))
 routes.put('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new RoomsController(service).updateUser(req, res))

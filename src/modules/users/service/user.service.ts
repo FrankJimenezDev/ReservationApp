@@ -29,7 +29,7 @@ export class UserService implements Service<User> {
         }
         const users = await query.getMany();
         if (users.length === 0) {
-            throw new Error(`No se encontraron usuarios registrados`)
+            throw new Error(`No se encontraron usuarios registrados con sus criterios de busqueda`)
         }
         return users
     }

@@ -5,9 +5,14 @@ export class RoomsController {
 
     constructor(private service: Service<Room>) { }
 
-    async getAllUsers(res: Response) {
+    async getAllUsers(req:Request, res: Response) {
+
+        const statusString: string | undefined = req.query.status as string | undefined;
+        const status: number | undefined = statusString !== undefined ? parseInt(statusString) : undefined;
+
         try {
-            const result = await this.service.getAll()
+
+            const result = await this.service.getAll(status)
             res.status(200).json({
                 success: true,
                 result

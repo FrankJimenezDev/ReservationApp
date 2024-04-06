@@ -24,12 +24,14 @@ export class RoomService implements Service<Room> {
             .leftJoinAndSelect('room.roomStatus', 'status')
 
         if (status !== undefined) {
-            query.andWhere('room.status_id = :status', { status: status });
+            query.andWhere('room.roomStatus = :status', { status: status });
         }
 
         const rooms = await query.getMany();
-        if (rooms.length === 0) {
+        if (rooms.length === 0 && !status) {
             throw new Error(`No se encontraron habitaciones registradas`)
+        } else if (rooms.length === 0 && status) {
+            throw new Error(`No se encontraron habitaciones con el status que solicita`)
         }
         return rooms
     }
@@ -53,7 +55,7 @@ export class RoomService implements Service<Room> {
     async create(body: CreateRoomDto): Promise<Room> {
         const {room_id} = body;
 
-        const searchRoom = await this.getOne(room_id)
+        const searchRoom = await this.roomRepository.findOneBy({room_id})
         if (searchRoom) {
             throw new Error(`Ya existe una habitacion con el id: ${room_id}`)
         }
