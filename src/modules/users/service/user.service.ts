@@ -3,14 +3,19 @@ import { UpdateUserDto } from "../model/updateDto";
 import { db } from "../../../config/db/dbconnection";
 import { encrypt } from "../../auth/helpers/bcrypt";
 import { select } from "../model/querySelect";
+import { Repository } from "typeorm";
 
 export class UserService implements Service<User> {
+    //creamos un repository 
+    userRepository: Repository<User>;
+    constructor() {
+        this.userRepository = db.getRepository(User)
+    }
 
     async getAll(status?: number, rol?: number): Promise<User[]> {
-
-        const userRepository = db.getRepository(User)
-
-        const query = userRepository
+        //ejecutamos la query con createQueryBuilder de typeORM: en .selec() van los campos
+        //en este caso los importamos de ./mode/querySelect.ts para mas comodidad
+        const query = this.userRepository
             .createQueryBuilder('user')
             .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
@@ -23,95 +28,53 @@ export class UserService implements Service<User> {
             query.andWhere('user.role_id = :rol', { rol: rol });
         }
         const users = await query.getMany();
+        if (users.length === 0) {
+            throw new Error(`No se encontraron usuarios registrados`)
+        }
         return users
-
     }
 
     async getOne(user_id: string): Promise<User> {
-
-        const userRepository = db.getRepository(User)
-
-        const query = userRepository
+        //ejecutamos la query con createQueryBuilder de typeORM: en .selec() van los campos
+        //en este caso los importamos de ./mode/querySelect.ts para mas comodidad
+        const query = this.userRepository
             .createQueryBuilder('user')
             .select(select)
             .leftJoinAndSelect('user.userRole', 'roles')
             .leftJoinAndSelect('user.userStatus', 'status')
             .where('user.user_id = :id', { id: user_id })
 
-        const user = await query.getOneOrFail()
+        const user = await query.getOne()
+        if (!user) {
+            throw new Error(`No se encontro usuario con el id: ${user_id}`)
+        }
         return user;
     }
 
     async update(user_id: string, body: UpdateUserDto): Promise<User> {
 
-        const userRepository = db.getRepository(User)
-
-        const userToUpdate = await userRepository.findOneBy({
-            user_id
-        })
-        if (!userToUpdate) {
-            throw new Error(`No existe usuario con el id: ${user_id}`);
-        }
+        const userToUpdate = await this.getOne(user_id)
         if (body.password) {
             const password = await encrypt(body.password);
             body.password = password
         }
-        userRepository.merge(userToUpdate, body)
-        await User.save(userToUpdate);
-
-        const query = userRepository
-            .createQueryBuilder('user')
-            .select(select)
-            .leftJoinAndSelect('user.userRole', 'roles')
-            .leftJoinAndSelect('user.userStatus', 'status')
-            .where('user.user_id = :id', { id: user_id })
-
-        const user = await query.getOneOrFail()
-        return user;
+        this.userRepository.merge(userToUpdate, body)
+        await this.userRepository.save(userToUpdate);
+        return this.getOne(user_id);
     }
 
     async delete(user_id: string): Promise<User> {
 
-        const userRepository = db.getRepository(User)
-
-        const userToDelete = await userRepository.findOneBy({
-            user_id
-        })
-
-        if (!userToDelete) {
-            throw new Error(`No se encontro usuario con el id: ${user_id}`);
-        }
+        const userToDelete = await this.getOne(user_id);
 
         if (userToDelete.status_id !== 7) {
-            User.merge(userToDelete, {
-                status_id: 7
-            })
-
-            await User.save(userToDelete);
-            const query = userRepository
-                .createQueryBuilder('user')
-                .select(select)
-                .leftJoinAndSelect('user.userRole', 'roles')
-                .leftJoinAndSelect('user.userStatus', 'status')
-                .where('user.user_id = :id', { id: user_id })
-
-            const user = await query.getOneOrFail()
-            return user;
+            this.userRepository.merge(userToDelete, { status_id: 7 })
+            await this.userRepository.save(userToDelete);
+            return this.getOne(user_id);
         }
 
-        User.merge(userToDelete, { status_id: 1 })
-        await User.save(userToDelete);
-
-        const query = userRepository
-            .createQueryBuilder('user')
-            .select(select)
-            .leftJoinAndSelect('user.userRole', 'roles')
-            .leftJoinAndSelect('user.userStatus', 'status')
-            .where('user.user_id = :id', { id: user_id })
-
-        const user = await query.getOneOrFail()
-        return user;
-
+        this.userRepository.merge(userToDelete, { status_id: 1 })
+        await this.userRepository.save(userToDelete);
+        return this.getOne(user_id);
     }
-
 }

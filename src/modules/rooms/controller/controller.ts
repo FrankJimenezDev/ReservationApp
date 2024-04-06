@@ -65,6 +65,7 @@ export class RoomsController {
             const result = await this.service.create!(body)
             res.status(200).json({
                 success: true,
+                message: 'Habitacion creada con exito',
                 result
             })
         } catch (error) {
@@ -93,6 +94,7 @@ export class RoomsController {
             const result = await this.service.update(id, body)
             res.status(200).json({
                 success: true,
+                message: 'Habitacion actualizada con exito',
                 result
             })
         } catch (error: any) {
@@ -115,6 +117,7 @@ export class RoomsController {
             const result = await this.service.delete(req.params.id)
             res.status(200).json({
                 success: true,
+                message: 'Habitacion eliminada con exito',
                 result
             })
         } catch (error: any) {
