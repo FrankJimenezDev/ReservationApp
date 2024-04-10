@@ -5,8 +5,31 @@ import { verify } from "../../../common/middlewares/jwt-validator";
 export class ReserveController {
     constructor( private service: Service<Reserve> ){}
 
-    getAllReserves(res: Response){}
-    getOneReserve(req : Request, res: Response){}
+    getAllReserves(req:Request, res: Response){}
+    async getOneReserve(req : Request, res: Response){
+        const { id } = req.params
+
+        try {
+            const result = await this.service.getOne(id)
+            res.status(200).json({
+                success: true,
+                result
+            })
+        } catch (error : any) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                })
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
+    }
 
     async create(req : Request, res: Response){
         const token = req.cookies.token
@@ -14,7 +37,7 @@ export class ReserveController {
         const { id } = payload
 
         const { body } = req;
-        body.userid = id
+        body.user_id = id        
 
         try {
             const result = await this.service.create!(body)

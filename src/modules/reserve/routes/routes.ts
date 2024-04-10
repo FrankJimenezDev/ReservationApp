@@ -9,7 +9,7 @@ import { Reserve } from "../../../config/entities/reserves";
 const routes = Router()
 const service : Service<Reserve> = new ReserveService()
 
-routes.get('/', validarJWT, rolAuth, ( req, res : Response)=> new ReserveController(service).getAllReserves(res))
+routes.get('/', validarJWT, rolAuth, ( req: Request, res : Response)=> new ReserveController(service).getAllReserves(req, res))
 routes.get('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new ReserveController(service).getOneReserve(req, res))
 routes.post('/', validarJWT, rolAuth, (req : Request, res : Response)=> new ReserveController(service).create(req, res))
 routes.put('/:id', validarJWT, rolAuth, (req : Request, res : Response)=> new ReserveController(service).updateReserve(req, res))

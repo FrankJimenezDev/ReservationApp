@@ -8,31 +8,31 @@ import { RoomsReserve } from "./rooms_reserve";
 @Entity()
 export class Room extends BaseEntity {
 
-    @PrimaryColumn({unique : true})
+    @PrimaryColumn({ unique: true })
     room_id!: string
 
     @Column()
-    size!: string 
+    size!: string
 
-    @Column({ type: "int", default: 0})
+    @Column({ type: "int", default: 0 })
     status_id!: number
 
     @Column()
     price!: number
 
-    @Column({ type: "int"})
+    @Column({ type: "int" })
     currency_id!: number
 
     @CreateDateColumn()
     createdAt: Date = new Date()
-    
+
     @UpdateDateColumn()
     updatedAt: Date = new Date()
 
     // campos de relacion
 
-    @OneToMany(() => RoomsReserve, room => room.room_id)
-    roomReserve!: Room[];
+    @OneToMany(() => RoomsReserve, roomReserve => roomReserve.room)
+    roomReserve!: RoomsReserve[];
 
     @ManyToOne(() => Status, status => status.status_id)
     @JoinColumn({ name: "status_id" })

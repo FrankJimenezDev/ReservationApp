@@ -8,7 +8,4 @@ export class Roles {
 
   @Column({ nullable: true, type: 'varchar', length: 45 })
   role_name!: string;
-
-  // @OneToMany(() => User, user => user.rol_id)
-  // users!: User[];
 }

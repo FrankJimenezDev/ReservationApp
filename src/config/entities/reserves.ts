@@ -14,7 +14,7 @@ export class Reserve extends BaseEntity {
     @Column({ type: "int", default: 1 })
     status_id!: number
 
-    @Column({type: "varchar", length: "255"})
+    @Column({ type: "varchar", length: "255" })
     user_id!: string
 
     @CreateDateColumn()
@@ -23,25 +23,25 @@ export class Reserve extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date = new Date();
 
-    @Column({ type: "date", nullable: true})
+    @Column({ type: "date", nullable: true })
     reserveday!: Date
 
-    @Column({ type: "date", nullable: true})
+    @Column({ type: "date", nullable: true })
     checkin?: Date
 
-    @Column({ type: "date", nullable: true})
+    @Column({ type: "date", nullable: true })
     checkout?: Date
 
     // campos de relacion
     @ManyToOne(() => User, user => user.user_id)
-    @JoinColumn({ name: "user_id"})
+    @JoinColumn({ name: "user_id" })
     userid!: User;
 
-    @OneToMany(() => RoomsReserve, reserve => reserve.reserve_id)
-    reserveRoom!: Reserve[];
+    @OneToMany(() => RoomsReserve, reserveRoom => reserveRoom.reserve)
+    reserveRoom!: RoomsReserve[];
 
     @ManyToOne(() => Status, status => status.status_id)
-    @JoinColumn({ name: "status_id"})
+    @JoinColumn({ name: "status_id" })
     reserveStatus!: Status;
 }
 
