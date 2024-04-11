@@ -38,10 +38,11 @@ export class ReserveController {
         const { id } = payload
 
         const { body } = req;
-        body.user_id = id        
+        const { reserveRoom, ...rest } = body
+        rest.user_id = id        
 
         try {
-            const result = await this.service.create!(body)
+            const result = await this.service.create!(rest, reserveRoom)
             res.status(200).json({
                 success: true,
                 result
