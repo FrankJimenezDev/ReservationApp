@@ -1,3 +1,19 @@
 export const select = [
-    'reserve'
+    'reserve.reserve_id',
+    'reserve.reserveday',
+    'reserve.checkin',
+    'reserve.checkout',
+    'user.user_id',
+    'user.name',
+    'user.lastname',
+    'user.email',
+    'userStatus.status_name',
+    'rol.role_name',
+    'status.status_name',
+    'reserveRoom.roomsReserve_id',
+    'room.room_id',
+    'room.size',
+    'room.price',
+    'roomStatus.status_name',
+    'currency.currency_name'
 ]

@@ -36,7 +36,7 @@ export class RoomService implements Service<Room> {
         return rooms
     }
 
-    async getOne(room_id: string): Promise<Room> {
+    async getOne(room_id: number): Promise<Room> {
 
         const query = this.roomRepository
             .createQueryBuilder('room')
@@ -65,7 +65,7 @@ export class RoomService implements Service<Room> {
         return this.getOne(room_id)
     }
 
-    async update(room_id: string, body: UpdateRoomDto): Promise<Room> {
+    async update(room_id: number, body: UpdateRoomDto): Promise<Room> {
 
         const room = await this.getOne(room_id)
         this.roomRepository.merge(room, body)
@@ -74,7 +74,7 @@ export class RoomService implements Service<Room> {
 
     }
 
-    async delete(room_id: string): Promise<Room> {
+    async delete(room_id: number): Promise<Room> {
 
         const room = await this.getOne(room_id)
 

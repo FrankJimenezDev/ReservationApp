@@ -1,5 +1,5 @@
 export interface CreateRoomDto {
-    room_id: string;
+    room_id: number;
     size: string,
     status_id:number,
     price:number,

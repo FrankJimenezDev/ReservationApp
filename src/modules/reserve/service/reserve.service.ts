@@ -3,12 +3,14 @@ import { CreateReserveDto } from "../model/createDto";
 import { db } from '../../../config/db/dbconnection';
 import { Repository } from "typeorm";
 import { select } from "../model/querySelect";
+import { RoomsReserve } from "../../../config/entities/rooms_reserve";
 
 export class ReserveService implements Service<Reserve> {
     reserveRepository: Repository<Reserve>;
-
+    roomsReserveRepository : Repository<RoomsReserve>
     constructor() {
         this.reserveRepository = db.getRepository(Reserve)
+        this.roomsReserveRepository = db.getRepository(RoomsReserve)
     }
 
 
@@ -21,11 +23,13 @@ export class ReserveService implements Service<Reserve> {
             .createQueryBuilder('reserve')
             .select(select)
             .leftJoin('reserve.userid', 'user')
-            .leftJoinAndSelect('user.userRole', 'rol')
-            .leftJoinAndSelect('user.userStatus', 'userStatus')
-            .leftJoinAndSelect('reserve.reserveStatus', 'status')
-            .leftJoinAndSelect('reserve.reserveRoom', 'reserveRoom')
-            .leftJoinAndSelect('reserveRoom.room', 'room')
+            .leftJoin('user.userRole', 'rol')
+            .leftJoin('user.userStatus', 'userStatus')
+            .leftJoin('reserve.reserveStatus', 'status')
+            .leftJoin('reserve.reserveRoom', 'reserveRoom')
+            .leftJoin('reserveRoom.room', 'room')
+            .leftJoin('room.roomStatus', 'roomStatus')
+            .leftJoin('room.currency', 'currency')
             .where('reserve.reserve_id = :id', { id: reserve_id });
 
         const reserve = await query.getOne();
@@ -37,10 +41,11 @@ export class ReserveService implements Service<Reserve> {
 
     async create(body: CreateReserveDto): Promise<Reserve> {
 
-        const { user_id } = body
+        // const { reserve_id } = body
         const reserveToCreate = this.reserveRepository.create(body)
         await this.reserveRepository.save(reserveToCreate)
-        const reserve = this.getOne(user_id)
+
+        const reserve = this.getOne(reserveToCreate.reserve_id)
         return reserve;
 
     }
