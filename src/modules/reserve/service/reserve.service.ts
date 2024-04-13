@@ -4,12 +4,15 @@ import { db } from '../../../config/db/dbconnection';
 import { Repository } from "typeorm";
 import { select } from "../model/querySelect";
 import { RoomsReserve } from "../../../config/entities/rooms_reserve";
+import { Room } from "../../../config/entities/rooms";
 
 export class ReserveService implements Service<Reserve> {
     reserveRepository: Repository<Reserve>;
     roomsReserveRepository: Repository<RoomsReserve>
+    roomsRepository: Repository<Room>;
     constructor() {
         this.reserveRepository = db.getRepository(Reserve)
+        this.roomsRepository = db.getRepository(Room)
         this.roomsReserveRepository = db.getRepository(RoomsReserve)
     }
 
@@ -40,33 +43,46 @@ export class ReserveService implements Service<Reserve> {
     }
 
     async create(body: CreateReserveDto, reserveRoom: number[]): Promise<Reserve> {
-
-        if (!reserveRoom || reserveRoom.length === 0) {
-            throw new Error("Debe enviar al menos un numero de habitacion a reservar");
+        //validamos que reserveRoom exista, sea un array y que dicho array no sea vacio
+        if (!reserveRoom || reserveRoom.length === 0 || !Array.isArray(reserveRoom)) {
+            throw new Error("Debe enviar al menos un número de habitación a reservar y debe ser un array");
         }
-        //priemro creamos la reserva con los datos del body y los guardamos
-        const reserveToCreate = this.reserveRepository.create(body)
-        //obtenemos el id de la reserva, nos hara falta para actualizar los datos de la tabla union
-        const { reserve_id } = reserveToCreate
-        //como puede que debamos guardar varias habitaciones, realizamos un .map a reserveRoom
-        //de esta menara guardamos las promesas en un arreglo llamado promises
-        //luego hacemos un await Promise.all(promises)
-        const promises = reserveRoom.map(async element => {
-            const roomsReserveDto = {
-                room_id: element,
-                reserve_id: reserve_id
-            };
-            const roomReserveToCreate = this.roomsReserveRepository.create(roomsReserveDto);
-            try {
-                await this.roomsReserveRepository.save(roomReserveToCreate);
-            } catch (error) {
-                throw new Error(`La habitación ${element} no existe, intente con otra habitación`);
-            }
+
+        //reamos la reserva para obtener el id de la misma, es necesario para la tabla union
+        const reserveToCreate = this.reserveRepository.create(body);
+        const { reserve_id } = reserveToCreate;
+
+        //verificamos que los ids enviados por el ciente sean de habitaciones existentes
+        const roomsPromises = reserveRoom.map(async room_id => {
+            return await this.roomsRepository.findOneBy({ room_id })
         });
 
-        await this.reserveRepository.save(reserveToCreate)
-        await Promise.all(promises);
+        //lo hacemos con un .map y luego un Promise.all
+        const rooms = await Promise.all(roomsPromises);
 
+        //verificamos que no haya un dato nulo dentro del resultado del Promise.all
+        if (rooms.includes(null)) {
+            throw new Error("Parece que ingresaste un numero de habitacion invalido; recuerda que las habitaciones estan asignadas en estricto orden numerico");
+        }
+
+        //si no hay un dato nulo se guarda la reserva
+        await this.reserveRepository.save(reserveToCreate)
+
+        //con la reserva creada hacemos un .map con las habitacoines una vez verificadas
+        //esto para crear y guardar los datos e la tabla union
+        const roomsReservePromises = rooms.map(async element => {
+            const dto = {
+                room_id: element!.room_id,
+                reserve_id: reserve_id
+            }
+            const reserve = this.roomsReserveRepository.create(dto)
+            return await this.roomsReserveRepository.save(reserve)
+        })
+        
+        //luego realizamos un Promise.all para esperar a que se ejecuten todas las promesas del .map
+        await Promise.all(roomsReservePromises)
+
+        //buscamos la reserva que creamos y la retornamos para verificar que se ha realizado correctamente
         const reserve = this.getOne(reserve_id)
         return reserve;
 
