@@ -1,9 +1,9 @@
 import { Repository } from "typeorm";
 import { db } from "../../../config/db/dbconnection";
-import { Room } from "../../../config/entities/rooms";
 import { select } from "../model/querySelect";
 import { CreateRoomDto } from "../model/createDto";
 import { UpdateRoomDto } from "../model/updateDto";
+import { Room } from "../../../config/entities";
 
 export class RoomService implements Service<Room> {
 

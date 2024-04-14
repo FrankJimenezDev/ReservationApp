@@ -1,9 +1,9 @@
-import { User } from "../../../config/entities/users";
-import { UpdateUserDto } from "../model/updateDto";
-import { db } from "../../../config/db/dbconnection";
-import { encrypt } from "../../auth/helpers/bcrypt";
-import { select } from "../model/querySelect";
 import { Repository } from "typeorm";
+import { db } from "../../../config/db/dbconnection";
+import { select } from "../model/querySelect";
+import { UpdateUserDto } from "../model/updateDto";
+import { encrypt } from "../../auth/helpers/bcrypt";
+import { User } from "../../../config/entities";
 
 export class UserService implements Service<User> {
     //creamos un repository 

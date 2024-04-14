@@ -1,10 +1,8 @@
-import { Reserve } from "../../../config/entities/reserves";
-import { CreateReserveDto } from "../model/createDto";
-import { db } from '../../../config/db/dbconnection';
 import { Repository } from "typeorm";
+import { db } from '../../../config/db/dbconnection';
+import { CreateReserveDto } from "../model/createDto";
 import { select } from "../model/querySelect";
-import { RoomsReserve } from "../../../config/entities/rooms_reserve";
-import { Room } from "../../../config/entities/rooms";
+import { Reserve, Room, RoomsReserve } from "../../../config/entities";
 
 export class ReserveService implements Service<Reserve> {
     reserveRepository: Repository<Reserve>;
@@ -37,7 +35,7 @@ export class ReserveService implements Service<Reserve> {
 
         const reserve = await query.getOne();
         if (!reserve) {
-            throw new Error(`La habitacion ${reserve_id} no existe`);
+            throw new Error(`La reservacion ${reserve_id} no existe`);
         }
         return reserve;
     }
@@ -48,7 +46,7 @@ export class ReserveService implements Service<Reserve> {
             throw new Error("Debe enviar al menos un número de habitación a reservar y debe ser un array");
         }
 
-        //reamos la reserva para obtener el id de la misma, es necesario para la tabla union
+        //realizamos la reserva para obtener el id de la misma, es necesario para la tabla union
         const reserveToCreate = this.reserveRepository.create(body);
         const { reserve_id } = reserveToCreate;
 
