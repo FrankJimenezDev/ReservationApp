@@ -3,6 +3,7 @@ import { db } from '../../../config/db/dbconnection';
 import { CreateReserveDto } from "../model/createDto";
 import { select } from "../model/querySelect";
 import { Reserve, Room, RoomsReserve } from "../../../config/entities";
+import { UpdateReserveDto } from "../model/updateDto";
 
 export class ReserveService implements Service<Reserve> {
     reserveRepository: Repository<Reserve>;
@@ -76,7 +77,7 @@ export class ReserveService implements Service<Reserve> {
             const reserve = this.roomsReserveRepository.create(dto)
             return await this.roomsReserveRepository.save(reserve)
         })
-        
+
         //luego realizamos un Promise.all para esperar a que se ejecuten todas las promesas del .map
         await Promise.all(roomsReservePromises)
 
@@ -86,9 +87,22 @@ export class ReserveService implements Service<Reserve> {
 
     }
 
-    async update(id: string, body: Reserve): Promise<Reserve> {
-        throw new Error("Method not implemented.");
+    async update(reserve_id: string, body: UpdateReserveDto): Promise<Reserve> {
+
+        const reserve = await this.reserveRepository.findOneBy({reserve_id})
+        if (!reserve) {
+            throw new Error(`No existe una reserva con el id: ${reserve_id}}`);
+        }
+        this.reserveRepository.merge(reserve, body)
+        try {
+            await this.reserveRepository.save(reserve)
+            return this.getOne(reserve_id)
+        } catch (error) {
+            throw new Error("Hubo un error al actualizar la reserva");
+        }
+
     }
+
     async delete(id: string): Promise<Reserve> {
         throw new Error("Method not implemented.");
     }

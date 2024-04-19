@@ -23,13 +23,13 @@ export class Reserve extends BaseEntity {
     @UpdateDateColumn()
     updatedAt: Date = new Date();
 
-    @Column({ type: "date", nullable: true })
+    @Column({ type: "datetime", nullable: true })
     reserveday!: Date
 
-    @Column({ type: "date", nullable: true })
+    @Column({ type: "datetime", nullable: true })
     checkin?: Date
 
-    @Column({ type: "date", nullable: true })
+    @Column({ type: "datetime", nullable: true })
     checkout?: Date
 
     // campos de relacion

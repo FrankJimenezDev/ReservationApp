@@ -6,6 +6,7 @@ export class ReserveController {
     constructor( private service: Service<Reserve> ){}
 
     getAllReserves(req:Request, res: Response){}
+
     async getOneReserve(req : Request, res: Response){
         const { id } = req.params
 
@@ -57,6 +58,31 @@ export class ReserveController {
         }
         
     }
-    updateReserve(req : Request, res: Response){}
+    
+    async updateReserve(req : Request, res: Response){
+        const { id } = req.params
+        const { body } = req
+
+        try {
+            const result = await this.service.update(id, body)
+            res.status(200).json({
+                success: true,
+                result
+            })
+        } catch (error : any) {
+            if (error instanceof Error) {
+                res.status(404).json({
+                    success: false,
+                    error: error.message
+                })
+            } else {
+                console.error('Unexpected error:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Internal Server Error'
+                });
+            }
+        }
+    }
     deleteReserve(req : Request, res: Response){}
 }

@@ -11,7 +11,7 @@ export const verify = (token : any) => {
 
 export const validarJWT = async (req: Request, res: Response, next: express.NextFunction) => {
 
-    const token = req.cookies.token;
+    const { token } = req.cookies;
 
     if (!token) {
         return res.status(401).json({

@@ -45,8 +45,11 @@ export class AuthController {
         }
         const { body } = req;
         try {
-            const result = await this.service.login(body)
-            res.cookie('token', result.token, { httpOnly: true });
+            const result : { user: any, token : string } = await this.service.login(body)
+            res.cookie('token', result.token, { 
+                httpOnly: true, 
+                secure: false
+            });
             res.status(200).json({
                 success: true,
                 result

@@ -38,7 +38,7 @@ export class ExpressServer {
     }
 
     middlewares() {
-        this.app.use(cors())
+        this.app.use(cors({credentials: true, origin: 'http://localhost:8080'}))
         this.app.use(express.json());
         this.app.use(cookieParser())
     }
