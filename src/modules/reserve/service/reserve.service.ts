@@ -89,10 +89,12 @@ export class ReserveService implements Service<Reserve> {
 
     async update(reserve_id: string, body: UpdateReserveDto): Promise<Reserve> {
 
-        const reserve = await this.reserveRepository.findOneBy({reserve_id})
+        const reserve = await this.reserveRepository.findOneBy({ reserve_id })
+
         if (!reserve) {
             throw new Error(`No existe una reserva con el id: ${reserve_id}}`);
         }
+
         this.reserveRepository.merge(reserve, body)
         try {
             await this.reserveRepository.save(reserve)
@@ -103,8 +105,21 @@ export class ReserveService implements Service<Reserve> {
 
     }
 
-    async delete(id: string): Promise<Reserve> {
-        throw new Error("Method not implemented.");
+    async delete(reserve_id: string): Promise<Reserve> {
+        const reserve = await this.reserveRepository.findOneBy({ reserve_id })
+        if (!reserve) {
+            throw new Error(`No existe una reserva con el id: ${reserve_id}}`);
+        }
+
+        if (reserve.status_id !== 8) {
+            this.reserveRepository.merge(reserve, { status_id: 8 })
+            this.reserveRepository.save(reserve)
+            return this.getOne(reserve_id)
+        }
+
+        this.reserveRepository.merge(reserve, { status_id: 1 })
+        this.reserveRepository.save(reserve)
+        return this.getOne(reserve_id)
     }
 
 }
