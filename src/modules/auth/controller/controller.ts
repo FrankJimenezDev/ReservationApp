@@ -25,14 +25,14 @@ export class AuthController {
             if (error instanceof Error) {
                 res.status(404).json({
                     success: false,
-                    error: error.message
+                    errors: error.message
                 });
                 return;
             } else {
                 console.error('Unexpected error:', error);
                 res.status(500).json({
                     success: false,
-                    error: 'Internal Server Error'
+                    errors: 'Internal Server Error'
                 });
             }
         }
@@ -59,14 +59,14 @@ export class AuthController {
             if (error instanceof Error) {
                 res.status(404).json({
                     success: false,
-                    error: error.message
+                    errors: error.message
                 });
                 return;
             } else {
                 console.error('Unexpected error:', error);
                 res.status(500).json({
                     success: false,
-                    error: 'Internal Server Error'
+                    errors: 'Internal Server Error'
                 });
             }
         }

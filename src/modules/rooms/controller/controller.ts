@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { Room } from "../../../config/entities/rooms";
+import { Service } from "../../../common/interfaces/services";
 
 export class RoomsController {
 
@@ -12,7 +13,7 @@ export class RoomsController {
 
         try {
 
-            const result = await this.service.getAll(status)
+            const result = await this.service.getAll({status})
             res.status(200).json({
                 success: true,
                 result
