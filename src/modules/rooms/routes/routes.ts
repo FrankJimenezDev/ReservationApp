@@ -4,6 +4,7 @@ import { RoomsController } from "../controller/controller";
 import { validarJWT } from "../../../common/middlewares/jwt-validator";
 import { rolAuth } from "../../../common/middlewares/rol-validator";
 import { Room } from "../../../config/entities/rooms";
+import { Service } from "../../../common/interfaces/services";
 
 
 const routes = Router()

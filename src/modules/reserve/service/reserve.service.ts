@@ -4,6 +4,7 @@ import { CreateReserveDto } from "../model/createDto";
 import { select } from "../model/querySelect";
 import { Reserve, Room, RoomsReserve } from "../../../config/entities";
 import { UpdateReserveDto } from "../model/updateDto";
+import { GetAllParams, Service } from "../../../common/interfaces/services";
 
 export class ReserveService implements Service<Reserve> {
     reserveRepository: Repository<Reserve>;
@@ -16,9 +17,37 @@ export class ReserveService implements Service<Reserve> {
     }
 
 
-    async getAll(): Promise<Reserve[]> {
-        throw new Error("Method not implemented.");
+    async getAll(params: GetAllParams): Promise<Reserve[]> {
+        const { status, reserveDay } = params
+
+        const query = this.reserveRepository
+            .createQueryBuilder('reserve')
+            .select(select)
+            .leftJoin('reserve.userid', 'user')
+            .leftJoin('user.userRole', 'rol')
+            .leftJoin('user.userStatus', 'userStatus')
+            .leftJoin('reserve.reserveStatus', 'status')
+            .leftJoin('reserve.reserveRoom', 'reserveRoom')
+            .leftJoin('reserveRoom.room', 'room')
+            .leftJoin('room.roomStatus', 'roomStatus')
+            .leftJoin('room.currency', 'currency')
+
+        if (status !== undefined) {
+            query.andWhere('reserve.status_id = :status', { status: status });
+        }
+        if (reserveDay !== undefined) {
+            const formattedReserveDay = `%${reserveDay}%`;
+            query.andWhere('reserve.reserveday LIKE :reserveday', { reserveday: formattedReserveDay });
+        }
+
+        const reserves = await query.getMany();
+        if (reserves.length === 0) {
+            throw new Error(`No se encontraron usuarios registrados con sus criterios de busqueda`)
+        }
+        return reserves
+
     }
+
     async getOne(reserve_id: string): Promise<Reserve> {
 
         const query = this.reserveRepository
@@ -118,7 +147,7 @@ export class ReserveService implements Service<Reserve> {
         }
 
         this.reserveRepository.merge(reserve, { status_id: 1 })
-        this.reserveRepository.save(reserve)
+        await this.reserveRepository.save(reserve)
         return this.getOne(reserve_id)
     }
 

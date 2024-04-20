@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { User } from "../../../config/entities/users";
+import { Service } from "../../../common/interfaces/services";
 
 export class UsersController {
 
@@ -14,7 +15,7 @@ export class UsersController {
         const rol: number | undefined = rolString !== undefined ? parseInt(rolString) : undefined;
 
         try {
-            const result = await this.service.getAll(status, rol)
+            const result = await this.service.getAll({status, rol})
             res.status(200).json({
                 success: true,
                 result

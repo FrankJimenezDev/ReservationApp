@@ -4,6 +4,7 @@ import { select } from "../model/querySelect";
 import { UpdateUserDto } from "../model/updateDto";
 import { encrypt } from "../../auth/helpers/bcrypt";
 import { User } from "../../../config/entities";
+import { GetAllParams, Service } from "../../../common/interfaces/services";
 
 export class UserService implements Service<User> {
     //creamos un repository 
@@ -12,7 +13,9 @@ export class UserService implements Service<User> {
         this.userRepository = db.getRepository(User)
     }
 
-    async getAll(status?: number, rol?: number): Promise<User[]> {
+    async getAll(params : GetAllParams ): Promise<User[]> {
+        
+        const { status, rol } = params
         //ejecutamos la query con createQueryBuilder de typeORM: en .selec() van los campos
         //en este caso los importamos de ./mode/querySelect.ts para mas comodidad
         const query = this.userRepository

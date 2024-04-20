@@ -4,6 +4,7 @@ import { UsersController } from "../controller/controller";
 import { User } from "../../../config/entities/users";
 import { validarJWT } from "../../../common/middlewares/jwt-validator";
 import { rolAuth } from "../../../common/middlewares/rol-validator";
+import { Service } from "../../../common/interfaces/services";
 
 
 const routes = Router()

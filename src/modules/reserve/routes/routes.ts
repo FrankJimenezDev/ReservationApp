@@ -4,6 +4,7 @@ import { ReserveController } from "../controller/reserve.controller";
 import { validarJWT } from "../../../common/middlewares/jwt-validator";
 import { rolAuth } from "../../../common/middlewares/rol-validator";
 import { Reserve } from "../../../config/entities/reserves";
+import { Service } from "../../../common/interfaces/services";
 
 
 const routes = Router()

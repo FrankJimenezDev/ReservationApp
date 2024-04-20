@@ -4,6 +4,7 @@ import { select } from "../model/querySelect";
 import { CreateRoomDto } from "../model/createDto";
 import { UpdateRoomDto } from "../model/updateDto";
 import { Room } from "../../../config/entities";
+import { GetAllParams, Service } from "../../../common/interfaces/services";
 
 export class RoomService implements Service<Room> {
 
@@ -14,7 +15,9 @@ export class RoomService implements Service<Room> {
         this.roomRepository = db.getRepository(Room)
     }
 
-    async getAll(status?: number): Promise<Room[]> {
+    async getAll(params: GetAllParams): Promise<Room[]> {
+
+        const { status } = params;
         //ejecutamos la query con createQueryBuilder de typeORM: en .selec() van los campos
         //en este caso los importamos de ./mode/querySelect.ts para mas comodidad
         const query = this.roomRepository
@@ -53,9 +56,9 @@ export class RoomService implements Service<Room> {
     }
 
     async create(body: CreateRoomDto): Promise<Room> {
-        const {room_id} = body;
+        const { room_id } = body;
 
-        const searchRoom = await this.roomRepository.findOneBy({room_id})
+        const searchRoom = await this.roomRepository.findOneBy({ room_id })
         if (searchRoom) {
             throw new Error(`Ya existe una habitacion con el id: ${room_id}`)
         }
