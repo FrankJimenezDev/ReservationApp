@@ -72,7 +72,7 @@ export class AuthService implements Auth<User> {
 
     }
     googleLogin(): any {
-        throw new Error("Method not implemented.");
+        throw new Error("Yo me llamo maximo decimo meridio");
     }
     facebookLogin(): any {
         throw new Error("Method not implemented.");
