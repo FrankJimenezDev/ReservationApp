@@ -72,13 +72,13 @@ export class AuthService implements Auth<User> {
 
     }
     googleLogin(): any {
-        throw new Error("Method not implemented");
+        throw new Error("Method not implemented.");
     }
     facebookLogin(): any {
-        throw new Error("Method not implemented");
+        throw new Error("Method not implemented.");
     }
     xLogin(): any {
-        throw new Error("Method not implemented");
+        throw new Error("Method not implemented.");
     }
 
 }
